@@ -1,12 +1,11 @@
 import streamlit as st
 from PIL import Image
 import os
-from data_loader import DataLoader
+from utils import DataLoader
 
-# Khởi tạo DataLoader
 loader = DataLoader(
-    path='visual-rag/v1_anno.jsonl',
-    img_dir='extracted/train'
+    path='../visual-rag/v1_anno.jsonl',
+    img_dir='../extracted/train'
 )
 
 st.title("Visual-RAG Viewer")
