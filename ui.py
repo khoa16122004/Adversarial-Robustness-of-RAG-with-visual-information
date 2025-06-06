@@ -65,6 +65,7 @@ if query:
         with cols[i % 5]:
             if os.path.exists(path):
                 img = Image.open(path)
+                print(path)
                 caption = "GT" if path in gt_paths else ""
                 st.image(img, caption="GT", use_container_width=True)
             else:
