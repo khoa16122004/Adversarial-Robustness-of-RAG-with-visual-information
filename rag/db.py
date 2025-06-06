@@ -37,15 +37,15 @@ class Database:
             for i in range(0, len(paths), batch_size):
                 batch_files = paths[i:i + batch_size]
                 batch_imgs = []
-                for j, file_name in enumerate(batch_files):
+                for j, file_path in enumerate(batch_files):
                     try:
-                        img = Image.open(os.path.join(self.dataset_dir, file_name)).convert("RGB")
+                        img = Image.open(file_path).convert("RGB")
                         batch_imgs.append(img)
                     except:
-                        fail_f.write(file_name + "\n")
+                        fail_f.write(file_path + "\n")
                         continue
                     
-                    writer.writerow([global_index, file_name])
+                    writer.writerow([global_index, file_path])
                     global_index += 1
                 print("Imgs batch: ", batch_imgs)
                 batch_features = vs_model.extract_visual_features(batch_imgs)
