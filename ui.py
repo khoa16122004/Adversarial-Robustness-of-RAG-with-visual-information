@@ -42,8 +42,9 @@ db = Database(
 )
 
 # Load annotated sample
-question, answer, _, gt_paths = loader.take_data(sample_id)
+question, answer, paths, gt_paths = loader.take_data(sample_id)
 print("Len gt: ", len(gt_paths))
+print("Len corpus: ", len(paths))
 # Read database embedding cho sample_id
 db.read_db(qs_id=sample_id, vs_model=vs_model)
 
@@ -54,9 +55,8 @@ st.markdown(f"### ✅ Annotated Answer:\n> {answer}")
 # Nhập query mới
 query = st.text_input("🔍 Enter your custom query", value=question)
 
-# Search ảnh từ query
 if query:
-    D, I = db.search_index([query], k=50)
+    D, I = db.search_index([query], k=5)
     retrieved_paths = db.get_image_paths(list(I))[0]
 
     st.markdown("### 🔍 Top-50 Retrieved Images")
