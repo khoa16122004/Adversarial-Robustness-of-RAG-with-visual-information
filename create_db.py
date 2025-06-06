@@ -59,14 +59,14 @@ if __name__ == '__main__':
                         help='Model name to use')
     parser.add_argument('--pretrained', type=str, required=False, default='',
                         help='Pretrained model path or ID (if applicable)')
-    parser.add_argument('--annotation_path', type=str, default="visual-rag\v1_anno.jsonl",
+    parser.add_argument('--annotation_path', type=str, default="v1_anno.jsonl",
                         help='Path to the annotation .jsonl file')
     parser.add_argument('--dataset_dir', type=str, required=False,
                         help='Directory containing image dataset',
-                        default="visual-rag\train")
+                        default="../extracted/train")
     parser.add_argument('--database_dir', type=str, required=False,
                         help='Directory to save extracted database',
-                        default="/data/elo/khoatn/Visual-RAG/vs_rag_dataset/database")
+                        default="database")
     parser.add_argument('--batch_size', type=int, default=128,
                         help='Batch size for feature extraction')
     parser.add_argument("--start_index", type=int, default=0)

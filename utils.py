@@ -21,7 +21,8 @@ class DataLoader:
         return question, answer, paths, gt_paths
     
     
-# if __name__ == "__main__":
-#     loader = DataLoader(path=r'visual-rag\v1_anno.jsonl',
-#                         img_dir=r'visual-rag\train')
-#     question, answer, paths, gt_path = loader.take_data(0)
+if __name__ == "__main__":
+    loader = DataLoader(path=r'v1_anno.jsonl',
+                        img_dir=r'visual-rag\train')
+    question, answer, paths, gt_path = loader.take_data(100)
+    print(gt_path)
