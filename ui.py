@@ -39,7 +39,6 @@ else:
 db = Database(
     data_loader=loader,
     database_dir="database",
-    vl_model=vs_model
 )
 
 # Load annotated sample
