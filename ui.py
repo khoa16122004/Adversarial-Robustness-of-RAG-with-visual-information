@@ -78,7 +78,7 @@ if query:
             with gt_cols[i % 5]:
                 if os.path.exists(path):
                     img = Image.open(path)
-                    st.image(img, caption="GT", use_column_width=True)
+                    st.image(img, caption="GT", use_container_width=True)
                 else:
                     st.text("Missing")
     else:
