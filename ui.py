@@ -43,7 +43,7 @@ db = Database(
 
 # Load annotated sample
 question, answer, _, gt_paths = loader.take_data(sample_id)
-
+print("Len gt: ", len(gt_paths))
 # Read database embedding cho sample_id
 db.read_db(qs_id=sample_id, vs_model=vs_model)
 
