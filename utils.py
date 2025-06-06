@@ -18,7 +18,7 @@ class DataLoader:
             if label == 1:
                 gt_paths.append(path)
                 
-        return question, answer, paths, gt_path
+        return question, answer, paths, gt_paths
             
 if __name__ == "__main__":
     loader = DataLoader(path=r'visual-rag\v1_anno.jsonl',
