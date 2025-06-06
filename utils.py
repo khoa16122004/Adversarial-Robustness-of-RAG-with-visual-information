@@ -14,9 +14,9 @@ class DataLoader:
         gt_paths = []
         for path, label in image_items.items():
             img_path = os.path.join(self.img_dir, path)
-            paths.append(path)
+            paths.append(img_path)
             if label == 1:
-                gt_paths.append(path)
+                gt_paths.append(img_path)
                 
         return question, answer, paths, gt_paths
             
