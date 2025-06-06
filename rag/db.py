@@ -47,7 +47,7 @@ class Database:
                     
                     writer.writerow([global_index, file_name])
                     global_index += 1
-                
+                print("Imgs batch: ", batch_imgs)
                 batch_features = vs_model.extract_visual_features(batch_imgs)
                 batch_features = batch_features.cpu().numpy()
 
