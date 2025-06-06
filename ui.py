@@ -66,7 +66,7 @@ if query:
             if os.path.exists(path):
                 img = Image.open(path)
                 caption = "GT" if path in gt_paths else ""
-                st.image(img, caption=caption, use_column_width=True)
+                st.image(img, caption="GT", use_container_width=True)
             else:
                 st.text("Missing")
 
