@@ -45,6 +45,8 @@ print("Len corpus: ", len(paths))
 db.read_db(qs_id=sample_id, vs_model=vs_model)
 
 st.markdown(f"### 🧠 Original Question:\n> {question}")
+st.markdown(f"### ✅ Question:\n> {question}")
+
 st.markdown(f"### ✅ Annotated Answer:\n> {answer}")
 
 query = st.text_input("🔍 Enter your custom query", value=question)
