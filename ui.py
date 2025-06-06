@@ -4,7 +4,7 @@ import os
 from utils import DataLoader
 
 loader = DataLoader(
-    path='../visual-rag/v1_anno.jsonl',
+    path='v1_anno.jsonl',
     img_dir='../extracted/train'
 )
 
