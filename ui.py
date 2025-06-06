@@ -10,7 +10,7 @@ loader = DataLoader(
     img_dir='../extracted/train'
 )
 
-# Sidebar: Model and Sample selection
+# Sidebar: chọn model và sample ID
 st.sidebar.title("⚙️ Configuration")
 model_name = st.sidebar.selectbox("Model", ["clip", "git", "open_clip", "blip", "flava"])
 sample_id = st.sidebar.number_input("Sample ID", min_value=0, max_value=len(loader.data) - 1, step=1)
@@ -35,24 +35,27 @@ else:
     st.error(f"Unknown model name: {model_name}")
     st.stop()
 
-# Load database
+# Tạo database instance
 db = Database(
     data_loader=loader,
     database_dir="database",
     vl_model=vs_model
 )
 
-# Load the sample
+# Load annotated sample
 question, answer, _, gt_paths = loader.take_data(sample_id)
 
-# Show question and answer
+# Read database embedding cho sample_id
+db.read_db(qs_id=sample_id, vs_model=vs_model)
+
+# Hiện câu hỏi, câu trả lời từ file gốc
 st.markdown(f"### 🧠 Original Question:\n> {question}")
 st.markdown(f"### ✅ Annotated Answer:\n> {answer}")
 
-# Custom query input
+# Nhập query mới
 query = st.text_input("🔍 Enter your custom query", value=question)
 
-# Search when user presses enter or changes text
+# Search ảnh từ query
 if query:
     D, I = db.search_index([query], k=50)
     retrieved_paths = db.get_image_paths(list(I))[0]
@@ -68,7 +71,7 @@ if query:
             else:
                 st.text("Missing")
 
-    # Show GT images separately
+    # Hiện GT images riêng
     if gt_paths:
         st.markdown("### 🎯 Ground Truth Images")
         gt_cols = st.columns(min(len(gt_paths), 5))
