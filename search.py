@@ -51,7 +51,7 @@ def main(args):
         D, I = db.search_index([question], 50)
         img_paths = db.get_image_paths(list(I))[0]
         with open(f"{output_dir}/{i}.json", 'w') as f:
-            json.dump({'question': question, 'image_paths': img_paths}, f, indent=4)
+            json.dump({'question': question , 'image_paths': img_paths}, f, indent=4)
         
     
     
