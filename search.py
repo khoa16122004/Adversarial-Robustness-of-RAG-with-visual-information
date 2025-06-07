@@ -37,8 +37,6 @@ def main(args):
 
 
     output_dir = f"{args.model_name}_retrieval_result"
-    if args.keywords_dir:
-        output_dir = f"{args.model_name}_keywords_retrieval_result"
     os.makedirs(output_dir, exist_ok=True)
     
     
