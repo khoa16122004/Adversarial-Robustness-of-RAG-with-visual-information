@@ -24,11 +24,6 @@ class DataLoader:
 if __name__ == "__main__":
     loader = DataLoader(path=r'v1_anno.jsonl',
                         img_dir=r'../extracted/train')
-    question, answer, paths, gt_path = loader.take_data(100)
+    question, answer, paths, gt_path = loader.take_data(183)
     
-    test = "../extracted/train/03115_Animalia_Chordata_Aves_Accipitriformes_Accipitridae_Accipiter_striatus/97992ba6-b82f-4004-a87f-a9934fea0c3b.jpg"
-    if test in paths:
-        print("True")
-    # print(paths)
-    
-    
+    print(gt_path)    
