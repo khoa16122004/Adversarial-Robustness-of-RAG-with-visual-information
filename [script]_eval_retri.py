@@ -1,6 +1,7 @@
 from utils import DataLoader
 from tqdm import tqdm
 import json
+import os
 
 k = 5
 model_name = "clip"
@@ -13,9 +14,23 @@ loader = DataLoader(path=annotation_path,
 start_index = 0
 end_index = 200
 
-total_recall = 0
-total_hit1 = 0
-count = 0
+output_dir = f"eval_grouped_{model_name}"
+os.makedirs(output_dir, exist_ok=True)
+
+group_files = {}  # cache file handles
+
+def write_to_group_file(correct_count, info):
+    # Tạo tên file dựa trên số ảnh đúng
+    if correct_count >= k:
+        file_key = f"{k}_plus_gt"
+    else:
+        file_key = f"{correct_count}_gt"
+
+    file_path = os.path.join(output_dir, f"{file_key}.jsonl")
+    if file_key not in group_files:
+        group_files[file_key] = open(file_path, "w", encoding="utf-8")
+    json.dump(info, group_files[file_key])
+    group_files[file_key].write("\n")
 
 for i in tqdm(range(start_index, end_index)): 
     question, answer, paths, gt_paths = loader.take_data(i)
@@ -26,17 +41,17 @@ for i in tqdm(range(start_index, end_index)):
 
     # Recall@k
     correct = sum([1 for p in retrieved_data_retri if p in gt_paths])
-    recall_at_k = correct / len(gt_paths) if len(gt_paths) > 0 else 0
-    total_recall += recall_at_k
+    
+    # Ghi thông tin vào file phù hợp
+    sample_info = {
+        "index": i,
+        "question": question,
+        "gt_paths": gt_paths,
+        "retrieved_paths": retrieved_data_retri,
+        "num_correct": correct
+    }
+    write_to_group_file(correct, sample_info)
 
-    # Hit@1
-    hit1 = 1 if retrieved_data_retri and retrieved_data_retri[0] in gt_paths else 0
-    total_hit1 += hit1
-
-    count += 1
-
-avg_recall_at_k = total_recall / count if count > 0 else 0
-avg_hit1 = total_hit1 / count if count > 0 else 0
-
-print(f"Average Recall@{k}: {avg_recall_at_k:.4f}")
-print(f"Average Hit@1: {avg_hit1:.4f}")
+# Đóng file sau khi ghi xong
+for f in group_files.values():
+    f.close()
