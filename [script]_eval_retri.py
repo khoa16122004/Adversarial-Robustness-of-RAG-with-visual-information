@@ -2,7 +2,7 @@ from utils import DataLoader
 from tqdm import tqdm
 import json
 
-k = 5
+k = 10
 model_name = "clip"
 
 annotation_path = "v1_anno.jsonl"
