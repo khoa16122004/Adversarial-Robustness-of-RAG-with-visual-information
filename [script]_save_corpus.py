@@ -3,7 +3,7 @@ import os
 import shutil
 
 output_dir = "split_corpus"
-sample_id = 183
+sample_id = 100
 result_dir = f"clip_retrieval_result/{sample_id}.json"
 
 with open(result_dir, "r") as f:
