@@ -19,6 +19,7 @@ def main(args):
     elif args.model_name == 'blip':
         from vl_models import BLIPModel
         vs_model = BLIPModel()
+        dim = 768
     elif args.model_name == 'flava':
         from vl_models import FLAVAModel
         vs_model = FLAVAModel()
