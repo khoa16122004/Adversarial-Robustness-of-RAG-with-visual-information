@@ -43,20 +43,15 @@ def main(args):
     
     for i in tqdm(range(args.start_index, args.end_index)): 
         question, answer, paths, gt_path = loader.take_data(i)
-        if args.keywords_dir:
-            with open(os.path.join(args.keywords_dir, f"keywords_{i}.json"), 'r') as f:
-                keywords_data = json.load(f)
-                qs = keywords_data['keywords']
-       
         db.read_db(
             qs_id=i,
             vs_model=vs_model,
         )
         
-        D, I = db.search_index([qs], 50)
+        D, I = db.search_index([question], 50)
         img_paths = db.get_image_paths(list(I))[0]
         with open(f"{output_dir}/{i}.json", 'w') as f:
-            json.dump({'question': qs, 'image_paths': img_paths}, f, indent=4)
+            json.dump({'question': question, 'image_paths': img_paths}, f, indent=4)
         
     
     
