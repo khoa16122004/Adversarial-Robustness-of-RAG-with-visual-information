@@ -19,6 +19,7 @@ def main(args):
         vs_model = OpenCLIPModel()
     elif args.model_name == 'blip':
         from vl_models import BLIPModel
+        dim = 768
         vs_model = BLIPModel()
     elif args.model_name == 'flava':
         from vl_models import FLAVAModel
@@ -33,6 +34,8 @@ def main(args):
         data_loader=loader,
         database_dir=args.database_dir
     )
+
+
     output_dir = f"{args.model_name}_retrieval_result"
     if args.keywords_dir:
         output_dir = f"{args.model_name}_keywords_retrieval_result"
@@ -46,8 +49,7 @@ def main(args):
             with open(os.path.join(args.keywords_dir, f"keywords_{i}.json"), 'r') as f:
                 keywords_data = json.load(f)
                 qs = keywords_data['keywords']
-        print("Question: ", question)
-        print("ID: ", i)                
+       
         db.read_db(
             qs_id=i,
             vs_model=vs_model,
@@ -60,7 +62,6 @@ def main(args):
         
     
     
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Visual Semantic Embedding Pipeline")
 
@@ -69,21 +70,18 @@ if __name__ == '__main__':
                         help='Model name to use')
     parser.add_argument('--pretrained', type=str, required=False, default='',
                         help='Pretrained model path or ID (if applicable)')
-    parser.add_argument('--annotation_path', type=str, required=False,
-                        help='Path to the annotation .jsonl file',
-                        default="/data/elo/khoatn/Visual-RAG/vs_rag_dataset/v1_anno.jsonl")
+    parser.add_argument('--annotation_path', type=str, default="v1_anno.jsonl",
+                        help='Path to the annotation .jsonl file')
     parser.add_argument('--dataset_dir', type=str, required=False,
                         help='Directory containing image dataset',
-                        default="/data/elo/khoatn/Visual-RAG/vs_rag_dataset/images")
+                        default="../extracted/train")
     parser.add_argument('--database_dir', type=str, required=False,
                         help='Directory to save extracted database',
                         default="database")
     parser.add_argument('--batch_size', type=int, default=128,
                         help='Batch size for feature extraction')
-    parser.add_argument("--keywords_dir", type=str, default="")
     parser.add_argument("--start_index", type=int, default=0)
     parser.add_argument("--end_index", type=int, default=0)
-
 
     args = parser.parse_args()
     main(args)
