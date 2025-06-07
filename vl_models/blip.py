@@ -9,6 +9,7 @@ class BLIPModel(VisionModel):
         super().__init__(model_name, pretrained)
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.load_model()
+        self.model_name = "blip"
 
     def load_model(self):
         self.processor = BlipProcessor.from_pretrained(self.model_name)
