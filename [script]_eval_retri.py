@@ -14,20 +14,29 @@ start_index = 0
 end_index = 200
 
 total_recall = 0
+total_hit1 = 0
 count = 0
 
 for i in tqdm(range(start_index, end_index)): 
     question, answer, paths, gt_paths = loader.take_data(i)
-    
+
     with open(f"{model_name}_retrieval_result/{i}.json") as f:
         retrieved_data = json.load(f)
     retrieved_data_retri = retrieved_data['image_paths'][:k]
-    
+
+    # Recall@k
     correct = sum([1 for p in retrieved_data_retri if p in gt_paths])
     recall_at_k = correct / len(gt_paths) if len(gt_paths) > 0 else 0
-
     total_recall += recall_at_k
+
+    # Hit@1
+    hit1 = 1 if retrieved_data_retri and retrieved_data_retri[0] in gt_paths else 0
+    total_hit1 += hit1
+
     count += 1
 
 avg_recall_at_k = total_recall / count if count > 0 else 0
+avg_hit1 = total_hit1 / count if count > 0 else 0
+
 print(f"Average Recall@{k}: {avg_recall_at_k:.4f}")
+print(f"Average Hit@1: {avg_hit1:.4f}")
