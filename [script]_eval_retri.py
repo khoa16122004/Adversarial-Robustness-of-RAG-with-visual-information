@@ -14,13 +14,9 @@ loader = DataLoader(path=annotation_path,
 start_index = 0
 end_index = 200
 
-# Stats
-hit_at = [0] * k  # hit_at[0] là Hit@1, hit_at[4] là Hit@5
-count = 0
-
-# For grouping by correct gt count
 output_dir = f"eval_grouped_{model_name}"
 os.makedirs(output_dir, exist_ok=True)
+
 group_files = {}
 
 def write_index(correct_count, idx):
@@ -44,19 +40,6 @@ for i in tqdm(range(start_index, end_index)):
     correct = sum([1 for p in retrieved_data_retri if p in gt_paths])
     write_index(correct, i)
 
-    # Hit@1 đến Hit@k
-    for j in range(k):
-        top_j_paths = retrieved_data_retri[:j + 1]
-        if any(p in gt_paths for p in top_j_paths):
-            hit_at[j] += 1
-
-    count += 1
-
-# Đóng file ghi
+# Đóng file
 for f in group_files.values():
     f.close()
-
-# In kết quả Hit@1 → Hit@5
-for j in range(k):
-    hit_rate = hit_at[j] / count if count > 0 else 0
-    print(f"Hit@{j + 1}: {hit_rate:.4f}")
