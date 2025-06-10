@@ -32,6 +32,7 @@ class GA:
         history = []
 
         for iter in range(self.max_iter):
+            # crossover - mutation
             r1, r2, r3 = [], [], []
             for i in range(self.population_size):
                 choices = [idx for idx in range(self.population_size) if idx != i]
@@ -50,19 +51,18 @@ class GA:
 
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
-
             mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) < self.mutation_rate
             mask[:, :, 0] = False  # không mutate kênh đầu tiên
             u = torch.where(mask.cuda(), v, population)
 
+            # calculate new fitness
             current_fitness = self.fitness(u)
             
-            
+            # pool
             pool = torch.cat([population, u], dim=0)  # (population_size, 2, ...)
             pool_fitness = torch.cat([fitness, current_fitness], dim=0)  # (population_size, 2)
 
-            print(pool_fitness.shape, pool.shape)
-            
+            # tournament selection
             indices = list(range(len(pool_fitness)))
             selected_indices = []
             for _ in range(self.tournament_size // 2):
