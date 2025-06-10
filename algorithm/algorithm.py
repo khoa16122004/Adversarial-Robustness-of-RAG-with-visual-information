@@ -53,7 +53,7 @@ class GA:
 
             mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) < self.mutation_rate
             mask[:, :, 0] = False  # không mutate kênh đầu tiên
-            u = torch.where(mask, v, population)
+            u = torch.where(mask.cuda(), v, population)
 
             current_fitness = self.fitness(u)
 
