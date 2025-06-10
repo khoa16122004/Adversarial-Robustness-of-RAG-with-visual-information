@@ -62,6 +62,8 @@ class GA:
             pool = torch.cat([population, u], dim=0)  # (population_size, 2, ...)
             pool_fitness = torch.cat([fitness, current_fitness], dim=0)  # (population_size, 2)
 
+            print(len(pool_fitness), len(pool_fitness))
+            
             # tournament selection
             selected_indices = []
             for _ in range(self.tournament_size // 2):
