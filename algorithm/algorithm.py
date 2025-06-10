@@ -71,6 +71,6 @@ class GA:
             population = pool_flat[selected_indices]
             fitness = self.fitness(population)
 
-            history.append(fitness.min().item())
+            history.append(fitness)
 
         return population, fitness, history
