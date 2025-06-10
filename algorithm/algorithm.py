@@ -72,6 +72,7 @@ class GA:
                 tournament_selected_ids = self.tournament_selection(fitness_shuffled)
                 selected_indices.extend(indices[tournament_selected_ids])
             
+            print(f"Selected indices: {selected_indices}")
             population = pool[selected_indices]
             fitness = pool_fitness[selected_indices]
             print(f"Iteration {iter + 1}/{self.max_iter}, Best fitness: {fitness.min().item()}")
