@@ -56,16 +56,13 @@ class GA:
             u = torch.where(mask.cuda(), v, population)
 
             current_fitness = self.fitness(u)
-
-            # Combine current and mutated
-            # population and fitness
-            # population: (population_size, n_k, 3, w, h)
-
             
             
             pool = torch.cat([population, u], dim=0)  # (population_size, 2, ...)
             pool_fitness = torch.cat([fitness, current_fitness], dim=0)  # (population_size, 2)
-        
+
+            print(pool_fitness.shape, pool.shape)
+            
             indices = list(range(len(pool_fitness)))
             selected_indices = []
             for _ in range(self.tournament_size // 2):
