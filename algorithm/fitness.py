@@ -20,7 +20,6 @@ class RetrieverFitness:
     def __call__(self, perturbations):  
         popsize, n, c, h, w = perturbations.shape
         adv_tensors = self.img_tensors + perturbations  # (popsize, n, 3, 224, 224)
-        print(adv_tensors.shape)
         adv_tensors = adv_tensors.clamp(0, 1)  # ensure valid image range
 
         adv_imgs = [

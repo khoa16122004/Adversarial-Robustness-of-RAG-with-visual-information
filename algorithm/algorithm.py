@@ -40,6 +40,10 @@ class GA:
                 r2.append(selected[1])
                 r3.append(selected[2])
 
+            r1 = torch.tensor(r1, dtype=torch.long, device="cuda")
+            r2 = torch.tensor(r2, dtype=torch.long, device="cuda")
+            r3 = torch.tensor(r3, dtype=torch.long, device="cuda")
+            
             x1 = population[r1]
             x2 = population[r2]
             x3 = population[r3]
