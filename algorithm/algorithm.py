@@ -51,7 +51,7 @@ class GA:
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
 
-            mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() < self.mutation_rate
+            mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) < self.mutation_rate
             mask[:, :, 0] = False  # không mutate kênh đầu tiên
             u = torch.where(mask, v, population)
 
