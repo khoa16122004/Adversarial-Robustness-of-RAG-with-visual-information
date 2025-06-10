@@ -29,11 +29,11 @@ with open(json_path, "r") as f:
     
 # repair for attack
 n_k = 2
-pop_size = 4
+pop_size = 50
 mutation_rate = 0.5
 F = 0.8
 max_iter = 100
-tournament_size = 50
+tournament_size = 4
 std = 0.05
 img_to_attack = [img_topk[i] for i in range(-n_k, 0)]
 w, h = img_to_attack[0].size
