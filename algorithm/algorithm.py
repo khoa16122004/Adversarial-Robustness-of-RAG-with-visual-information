@@ -76,7 +76,7 @@ class GA:
             
             population = pool[selected_indices]
             fitness = pool_fitness[selected_indices]
-            
+            print(f"Iteration {iter + 1}/{self.max_iter}, Best fitness: {fitness.min().item()}")
             history.append(fitness)
 
         return population, fitness, history
