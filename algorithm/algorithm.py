@@ -26,7 +26,7 @@ class GA:
         return selected_indices
 
     def solve(self):
-        population = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) * self.std
+        population = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() * self.std
         fitness = self.fitness(population)
 
         history = []
