@@ -28,7 +28,7 @@ with open(json_path, "r") as f:
     img_topk = [imgs[id] for id in indices]
     
 # repair for attack
-n_k = 2
+n_k = 3
 pop_size = 50
 mutation_rate = 0.5
 F = 0.8
