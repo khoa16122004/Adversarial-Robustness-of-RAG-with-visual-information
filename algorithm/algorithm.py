@@ -59,22 +59,19 @@ class GA:
 
             # Combine current and mutated
             pool = torch.cat([population.unsqueeze(1), u.unsqueeze(1)], dim=1)  # (population_size, 2, ...)
-            pool_fitness = torch.stack([fitness, current_fitness], dim=1)  # (population_size, 2)
+            pool_fitness = torch.cat([fitness, current_fitness], dim=1)  # (population_size, 2)
 
-            # Flatten pool and fitness for tournament selection
-            pool_flat = pool.view(-1, self.n_k, 3, self.w, self.h)
-            fitness_flat = pool_fitness.view(-1)
-
-            indices = list(range(len(fitness_flat)))
-            random.shuffle(indices)
-            fitness_shuffled = fitness_flat[indices]
-
-            selected_indices = self.tournament_selection(fitness_shuffled)
-            selected_indices = torch.tensor([indices[i] for i in selected_indices])
-
-            population = pool_flat[selected_indices]
-            fitness = self.fitness(population)
-
+            indices = list(range(len(pool_fitness)))
+            selected_indices = []
+            for _ in range(self.tournament_size // 2):
+                random.shuffle(indices)
+                fitness_shuffled = pool_fitness[indices]
+                tournament_selected_ids = self.tournament_selection(fitness_shuffled)
+                selected_indices.extend(tournament_selected_ids)
+            
+            population = pool[selected_indices]
+            fitness = pool_fitness[selected_indices]
+            
             history.append(fitness)
 
         return population, fitness, history
