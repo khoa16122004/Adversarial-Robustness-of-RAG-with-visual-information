@@ -44,9 +44,9 @@ class GA:
             r2 = torch.tensor(r2, dtype=torch.long, device="cuda")
             r3 = torch.tensor(r3, dtype=torch.long, device="cuda")
             
-            x1 = population[r1]
-            x2 = population[r2]
-            x3 = population[r3]
+            x1 = deepcopy.copy(population[r1])
+            x2 = deepcopy.copy(population[r2])
+            x3 = deepcopy.copy(population[r3])
 
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
