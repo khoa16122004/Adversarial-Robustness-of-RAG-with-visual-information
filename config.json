@@ -1,0 +1,17 @@
+{
+    "top_k": 5,
+    "nk": 2,
+    "mean": 0.0,
+    "std": 1.0,
+    "dataset_path": "data\\100",
+    "output_path": "output",
+    "population_size": 50,
+    "tournament_size": 4,
+    "max_generations": 100,
+    "crossover_rate": 0.5,
+    "mutation_rate": 0.3,
+    "perturbation_budget": 0.3,
+    "alpha": 1.0,
+    "target_class": null,
+    "selection_method": "tournament"
+}

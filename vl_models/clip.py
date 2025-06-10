@@ -16,6 +16,7 @@ class CLIPModel(VisionModel):
     def load_model(self):
         print(os.getenv("HF_TOKEN"))
         self.model = HFCLIPModel.from_pretrained(self.pretrained,
+                                                 use_safetensors=True,
                                                  token=os.getenv("HF_TOKEN")).to(self.device)
         self.processor = CLIPProcessor.from_pretrained(self.pretrained)
 
