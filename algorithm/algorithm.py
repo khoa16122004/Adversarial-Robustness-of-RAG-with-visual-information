@@ -63,10 +63,10 @@ class GA:
             pool_fitness = torch.cat([fitness, current_fitness], dim=0)  # (population_size, 2)
 
             # tournament selection
-            indices = list(range(len(pool_fitness)))
+            indices = torch.tensor([k for k in range(len(pool_fitness))])
             selected_indices = []
             for _ in range(self.tournament_size // 2):
-                random.shuffle(indices)
+                indices = torch.randperm(indices)
                 fitness_shuffled = pool_fitness[indices]
                 tournament_selected_ids = self.tournament_selection(fitness_shuffled)
                 selected_indices.extend(indices[tournament_selected_ids])
