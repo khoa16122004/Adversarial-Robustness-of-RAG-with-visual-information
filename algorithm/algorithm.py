@@ -58,6 +58,8 @@ class GA:
             current_fitness = self.fitness(u)
 
             # Combine current and mutated
+            print("current fitness", current_fitness)
+            print("population fitness", fitness)
             pool = torch.cat([population.unsqueeze(1), u.unsqueeze(1)], dim=1)  # (population_size, 2, ...)
             pool_fitness = torch.cat([fitness, current_fitness], dim=1)  # (population_size, 2)
 
