@@ -1,5 +1,6 @@
 import json
 import os
+import torch.nn.functional as F
 class DataLoader:    
     def __init__(self, path, img_dir):
         self.img_dir = img_dir
@@ -19,6 +20,10 @@ class DataLoader:
                 gt_paths.append(img_path)
                 
         return question, answer, paths, gt_paths
+
+
+def s(x, y):
+    return F.cosine_similarity(x, y, dim=-1).mean().item()
     
     
 if __name__ == "__main__":

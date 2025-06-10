@@ -9,5 +9,4 @@ def zip_folder(folder_path, output_zip_path):
                 arcname = os.path.relpath(file_path, folder_path)
                 zipf.write(file_path, arcname)
 
-# Ví dụ sử dụng
 zip_folder('split_corpus', 'split_corpus.zip')
