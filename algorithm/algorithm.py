@@ -64,7 +64,7 @@ class GA:
             print("u size:", u.shape)
             
             
-            pool = torch.cat([population.unsqueeze(1), u.unsqueeze(1)], dim=1)  # (population_size, 2, ...)
+            pool = torch.cat([population.unsqueeze(1), u.unsqueeze(1)], dim=0)  # (population_size, 2, ...)
             pool_fitness = torch.cat([fitness, current_fitness], dim=0)  # (population_size, 2)
 
             indices = list(range(len(pool_fitness)))
