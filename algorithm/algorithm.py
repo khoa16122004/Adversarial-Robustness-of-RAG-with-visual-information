@@ -69,7 +69,7 @@ class GA:
                 random.shuffle(indices)
                 fitness_shuffled = pool_fitness[indices]
                 tournament_selected_ids = self.tournament_selection(fitness_shuffled)
-                selected_indices.extend(tournament_selected_ids)
+                selected_indices.extend(indices[tournament_selected_ids])
             
             population = pool[selected_indices]
             fitness = pool_fitness[selected_indices]
