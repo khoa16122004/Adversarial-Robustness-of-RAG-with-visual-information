@@ -38,6 +38,6 @@ if __name__ == "__main__":
     path = "logs/clip_llava_0.01_183_individuals.pkl"
     ind = pkl.load(open(path, "rb"))
     print(len(ind))
-    print(ind.shape)
+    print(ind[0].shape)
     pass
     
