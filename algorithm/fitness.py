@@ -4,6 +4,7 @@ from torchvision.transforms.functional import to_pil_image
 from retriever import Retriever
 from reader import Reader
 import numpy as np
+import pickle as pkl
 
 class MultiScore:
     def __init__(self, reader_name, retriever_name, question, original_img, answer):
@@ -31,3 +32,11 @@ class MultiScore:
         reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
         return retri_scores, reader_scores
+    
+    
+if __name__ == "__main__":
+    path = "logs/clip_llava_0.01_183_individuals.pkl"
+    ind = pkl.load(open(path, "rb"))
+    print(ind)
+    pass
+    
