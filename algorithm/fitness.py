@@ -20,6 +20,7 @@ class MultiScore:
     def __call__(self, pertubations):  # pertubations: tensor
         adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
+        print(adv_img_tensors.shape)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
 
         retrieval_result = self.retriever(self.question, adv_imgs)
