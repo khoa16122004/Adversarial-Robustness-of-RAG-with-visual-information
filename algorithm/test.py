@@ -23,7 +23,7 @@ n_k = 1
 w = 224
 h = 224
 max_iter = 100
-std = 0.05
+std = 0.1
 
 sample_id = 183
 question, answer, paths, gt_paths = loader.take_data(sample_id)
