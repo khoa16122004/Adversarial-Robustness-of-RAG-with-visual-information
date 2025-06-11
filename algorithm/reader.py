@@ -42,7 +42,8 @@ class Reader(torch.nn.Module):
         for img in img_files:
             output = self.model.compute_log_prob(prompt, [img], answer)
             all_outputs.append(output)
-            
+        
+        all_outputs = torch.tensor(all_outputs)    
         return all_outputs
             
             
