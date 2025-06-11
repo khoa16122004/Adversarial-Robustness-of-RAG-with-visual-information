@@ -45,11 +45,11 @@ if __name__ == "__main__":
     loader = DataLoader(path=annotation_path,
                         img_dir=dataset_dir)   
     
-    question, answer, paths, gt_path = loader.take_data(183)
+    question, answer, paths, gt_paths = loader.take_data(183)
     print(answer)
 
-    img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in paths]
-    
+    img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in gt_paths]
+    print(len(img_files))
     
     reader = Reader()
 
