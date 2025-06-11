@@ -68,5 +68,5 @@ if __name__ == "__main__":
     
     print("score: ", history)
 
-    output = fitnesse(ind)
+    output = torch.tensor(fitnesse(ind))
     print("output: ", output)
