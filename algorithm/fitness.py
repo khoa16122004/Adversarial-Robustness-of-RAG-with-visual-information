@@ -1,7 +1,3 @@
-import torch
-from torchvision import transforms
-from torchvision.transforms.functional import to_pil_image
-
 class RetrieverFitness:
     def __init__(self, vl_models, imgs, query):
         self.vl_models = vl_models
@@ -37,11 +33,3 @@ class RetrieverFitness:
                 fitness_scores.append(fitness)
 
         return torch.tensor(fitness_scores)  # (popsize,)
-    
-
-    
-    
-class MultiFitness:
-    def __init__(vlm, lvlm, imgs, query):
-        self.retriever_fitness = RetrieverFitness(vlm, imgs, query)
-        self.lvlm_fitness = RetrieverFitness(lvlm, imgs, query)
