@@ -15,6 +15,8 @@ class MultiScore:
         self.reader_clean_result = self.reader(question, [original_img], answer)
         self.answer = answer
         self.question = question
+        self.retriever_name = retriever_name
+        self.reader_name = reader_name
         
     
     def __call__(self, pertubations):  # pertubations: tensor
