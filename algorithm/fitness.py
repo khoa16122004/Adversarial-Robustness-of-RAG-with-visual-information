@@ -10,7 +10,6 @@ from PIL import Image
 import sys
 sys.path.append('..')
 from utils import DataLoader
-from fitness import MultiScore
 
 class MultiScore:
     def __init__(self, reader_name, retriever_name, question, original_img, answer):
