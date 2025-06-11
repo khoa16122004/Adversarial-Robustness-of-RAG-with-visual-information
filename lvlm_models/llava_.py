@@ -106,7 +106,7 @@ class LLava:
         # Log-prob = -loss * len(answer tokens)
         num_answer_tokens = answer_ids.shape[1]
         total_log_prob = -loss.item() * num_answer_tokens
-        prob = torch.exp(total_log_prob)
+        prob = math.exp(total_log_prob)
 
         return prob
 
