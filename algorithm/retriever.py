@@ -32,5 +32,5 @@ if __name__ == "__main__":
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Retriever(model_name="llava")
     
-    score = reader(question, [img_files[3]])
+    score = reader("orange eyes", [img_files[3]])
     print(score)
