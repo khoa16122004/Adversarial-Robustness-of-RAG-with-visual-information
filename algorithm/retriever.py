@@ -28,7 +28,7 @@ if __name__ == "__main__":
     question, answer, paths, gt_paths = loader.take_data(183)
     print(answer)
 
-    img_files = [Image.open(path).convert('RGB').resize((312, 312)) for path in gt_paths]
+    img_files = [Image.open(path).convert('RGB').resize((428, 428)) for path in gt_paths]
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Retriever(model_name="clip")
     
