@@ -34,7 +34,7 @@ class LLava:
         
     
     
-    def inference(self, qs, img_files, num_return_sequences=1, do_sample=True, temperature=0, reload=True):
+    def __call__(self, qs, img_files, num_return_sequences=1, do_sample=False, temperature=0, reload=False):
         # reload_llm
         if reload == True:
             if torch.cuda.is_available():

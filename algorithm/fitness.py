@@ -37,3 +37,11 @@ class RetrieverFitness:
                 fitness_scores.append(fitness)
 
         return torch.tensor(fitness_scores)  # (popsize,)
+    
+
+    
+    
+class MultiFitness:
+    def __init__(vlm, lvlm, imgs, query):
+        self.retriever_fitness = RetrieverFitness(vlm, imgs, query)
+        self.lvlm_fitness = RetrieverFitness(lvlm, imgs, query)
