@@ -14,15 +14,16 @@ class MultiScore:
         self.retri_clean_reuslt = self.retriever(question, [original_img])
         self.reader_clean_result = self.reader(question, [original_img], answer)
         self.answer = answer
+        self.question = question
         
     
-    def __call__(self, question, pertubations, answer):  # pertubations: tensor
+    def __call__(self, pertubations):  # pertubations: tensor
         adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
 
-        retrieval_result = self.retriever(question, adv_imgs)
-        reader_result = self.reader(question, adv_imgs, answer)
+        retrieval_result = self.retriever(self.question, adv_imgs)
+        reader_result = self.reader(self.question, adv_imgs, self.answer)
 
         retri_scores = np.array(self.retri_clean_reuslt) / np.array(retrieval_result)
         reader_scores = np.array(reader_result) / np.array(self.reader_clean_result)
