@@ -41,6 +41,8 @@ class Reader(torch.nn.Module):
             output = self.model.compute_log_prob(qs, [img], answer)
             all_outputs.append(output)
             
+        return all_outputs
+            
             
             
 if __name__ == "__main__":
