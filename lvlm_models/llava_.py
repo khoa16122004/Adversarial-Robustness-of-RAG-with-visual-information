@@ -6,7 +6,7 @@ import copy
 import torch
 import warnings
 import torch.nn.functional as F
-
+import math
 warnings.filterwarnings("ignore")
 
 class LLava:
@@ -73,6 +73,7 @@ class LLava:
     
     
     def compute_log_prob(self, question, imgs, answer):
+        # Tạo prompt
         conv = copy.deepcopy(conv_templates["qwen_1_5"])
         conv.append_message(conv.roles[0], question)
         conv.append_message(conv.roles[1], None)
@@ -81,27 +82,31 @@ class LLava:
         input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
         answer_ids = self.tokenizer.encode(answer, add_special_tokens=False, return_tensors="pt").to(self.device)
 
-        full_ids = torch.cat([input_ids, answer_ids], dim=1)
+        input_with_answer = torch.cat([input_ids, answer_ids], dim=1)
+        labels = input_with_answer.clone()
+        
+        # Mask phần prompt (không tính loss ở đó)
+        labels[0, :input_ids.shape[1]] = IGNORE_INDEX
 
-        # Image pre-processing
+        # Xử lý ảnh
         image_tensors = process_images(imgs, self.image_processor, self.model.config)
         image_tensors = [_image.to(dtype=torch.float16, device=self.device) for _image in image_tensors]
         image_sizes = [image.size for image in imgs]
 
-        # Forward pass
+        # Tính loss
         with torch.no_grad():
-            outputs = self.model(full_ids, images=image_tensors, image_sizes=image_sizes)
-            logits = outputs.logits[0]
+            output = self.model(
+                input_ids=input_with_answer,
+                labels=labels,
+                images=image_tensors,
+                image_sizes=image_sizes,
+            )
+            loss = output.loss
 
-        prompt_len = input_ids.shape[1]
-        answer_logits = logits[prompt_len-1 : prompt_len-1 + answer_ids.shape[1]]
-        log_probs = F.log_softmax(answer_logits, dim=-1)
-
-        answer_tokens = answer_ids.squeeze(0)
-        token_log_probs = log_probs.gather(1, answer_tokens.unsqueeze(1)).squeeze(1)
-
-        total_log_prob = token_log_probs.sum()
-        prob = torch.exp(total_log_prob).item()
+        # Log-prob = -loss * len(answer tokens)
+        num_answer_tokens = answer_ids.shape[1]
+        total_log_prob = -loss.item() * num_answer_tokens
+        prob = torch.exp(total_log_prob)
 
         return prob
 
