@@ -16,14 +16,14 @@ dataset_dir = "../../extracted/train"
 loader = DataLoader(path=annotation_path,
                     img_dir=dataset_dir)   
 
-pop_size = 10
+pop_size = 50
 mutation_rate = 0.1
 F = 0.9
 n_k = 1
 w = 224
 h = 224
-max_iter = 10
-std = 0.05
+max_iter = 100
+std = 0.01
 
 sample_id = 183
 question, answer, paths, gt_paths = loader.take_data(sample_id)
