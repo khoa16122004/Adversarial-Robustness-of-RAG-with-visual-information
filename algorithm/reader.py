@@ -54,7 +54,7 @@ if __name__ == "__main__":
     reader = Reader()
 
     
-    outputs = reader.image_to_text(question, img_files)
+    outputs = reader.image_to_text(question, [img_files[0]])
     print(outputs)  # Should print the answer to the question based on the image provided.
             
         
