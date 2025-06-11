@@ -65,9 +65,12 @@ if __name__ == "__main__":
     
     history = pkl.load(open(score_path, "rb"))[-1]
     ind = torch.stack(pkl.load(open(ind_path, "rb")), dim=0)
-  
+    adv_img_tensors = ind + fitnesse.original_img_tensor
+    adv_img_tensors = adv_img_tensors.clamp(0, 1)
+    adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
     
-    print("score: ", history)
-    print("ind: ", ind.shape)
-    output = fitnesse(torch.tensor(ind))
-    print("output: ", output)
+    outputs = []
+    for img in adv_imgs:
+        output = fitnesse.reader.image_to_text(question, [img])
+        outputs.append(output)
+    print("outputs: ", outputs)
