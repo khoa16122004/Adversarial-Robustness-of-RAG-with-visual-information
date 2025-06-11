@@ -49,10 +49,7 @@ if __name__ == "__main__":
     print(answer)
 
     img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in gt_paths]
-    print(len(img_files))
-    print(gt_paths[0])
-    
-    reader = Reader()
+    img_files.save("test_image.jpg")  # Save the image for testing purposes.
 
     
     outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[0]])
