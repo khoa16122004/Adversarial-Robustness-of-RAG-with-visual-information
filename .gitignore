@@ -195,4 +195,4 @@ cython_debug/
 
 /data/*
 /output/*
-split_corpus
+# split_corpus
