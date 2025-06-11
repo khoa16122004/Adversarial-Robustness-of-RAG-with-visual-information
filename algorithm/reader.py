@@ -50,7 +50,7 @@ if __name__ == "__main__":
 
     img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in gt_paths]
     print(len(img_files))
-    print(gt_paths)
+    print(gt_paths[0])
     
     reader = Reader()
 
