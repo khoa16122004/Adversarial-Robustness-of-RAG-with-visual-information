@@ -156,7 +156,8 @@ class NSGAII:
 
 
     def solve(self):
-        P = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() * self.std
+        # P = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() * self.std
+        P = torch.rand(self.population_size, 3, self.w, self.h).cuda() * self.std
         P_retri_score, P_reader_score = self.fitness(P)
         
 
