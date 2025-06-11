@@ -60,8 +60,8 @@ if __name__ == "__main__":
     
     
     
-    ind_path = "logs/clip_llava_0.01_183_individuals.pkl"
-    score_path = "logs/clip_llava_0.01_183.pkl"
+    ind_path = "logs/clip_lava_0.1/individuals.pkl"
+    score_path = "logs/clip_lava_0.1/scores.pkl"
     
     history = pkl.load(open(score_path, "rb"))[-1]
     ind = torch.stack(pkl.load(open(ind_path, "rb")), dim=0)
@@ -70,8 +70,8 @@ if __name__ == "__main__":
     adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
     adv_imgs.append(fitnesse.original_img)
     outputs = []
+    fitnesse.original_img.save("original.png")
     for i, img in enumerate(adv_imgs):
-        img.save(f"")
         output = fitnesse.reader.image_to_text(question, [img])
         outputs.append(output)
     print("outputs: ", outputs)
