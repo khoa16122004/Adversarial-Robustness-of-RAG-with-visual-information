@@ -32,5 +32,5 @@ if __name__ == "__main__":
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Retriever(model_name="clip")
     
-    score = reader("blue_sky", [img_files[3], img_files[0], img_files[1], img_files[2]])
+    score = reader("blue sky", [img_files[3], img_files[0], img_files[1], img_files[2]])
     print(score)
