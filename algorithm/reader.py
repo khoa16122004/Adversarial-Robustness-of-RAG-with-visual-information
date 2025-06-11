@@ -40,8 +40,8 @@ class Reader(torch.nn.Module):
             
             
 if __name__ == "__main__":
-    annotation_path = "v1_anno.jsonl"
-    dataset_dir = "../extracted/train"
+    annotation_path = "../v1_anno.jsonl"
+    dataset_dir = "../../extracted/train"
     loader = DataLoader(path=annotation_path,
                         img_dir=dataset_dir)   
     
