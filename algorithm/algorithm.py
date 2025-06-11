@@ -241,8 +241,8 @@ class NSGAII:
         self.save_logs()
         
     def save_logs(self):
-        score_log_file = os.path.join(self.log_dir, f"{self.retri_name}_{self.reader_name}_{self.std}_{self.sample_id}.pkl")
-        invidual_log_file = os.path.join(self.log_dir, f"{self.retri_name}_{self.reader_name}_{self.std}_{self.sample_id}_individuals.pkl")
+        score_log_file = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}_{self.sample_id}.pkl")
+        invidual_log_file = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}_{self.sample_id}_individuals.pkl")
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)
