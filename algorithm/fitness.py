@@ -12,14 +12,18 @@ sys.path.append('..')
 from utils import DataLoader
 
 class MultiScore:
-    def __init__(self, reader_name, retriever_name, question, original_img, answer):
+    def __init__(self, reader_name, retriever_name, question, corpus):
         self.reader = Reader(reader_name)
         self.retriever = Retriever(retriever_name)
-        self.original_img = original_img
+        
+        # calcuate the oriignal img
+        sims = self.retriever(img_files)
+        self.original_img = img_files[np.argmax(sims)]
+        
         self.original_img_tensor = transforms.ToTensor()(original_img).cuda()
         self.retri_clean_reuslt = self.retriever(question, [original_img])
         self.reader_clean_result = self.reader(question, [original_img], answer)
-        self.answer = answer
+        self.answer = self.reader.image_to_text(question, [original_img])[0]
         self.question = question
         self.retriever_name = retriever_name
         self.reader_name = reader_name

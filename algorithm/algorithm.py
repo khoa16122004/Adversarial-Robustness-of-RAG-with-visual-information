@@ -108,7 +108,7 @@ class NSGAII:
         self.std = std
         self.nds = NonDominatedSorting()
         self.sample_id = sample_id
-        self.log_dir = os.path.join(log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}")
+        self.log_dir = os.path.join(log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}", str(self.sample_id))
         os.makedirs(self.log_dir, exist_ok=True)
 
         
@@ -248,7 +248,7 @@ class NSGAII:
         
     def save_logs(self):
         
-        score_log_file = os.path.join(self.log_dir, "scores.pkl") 
+        score_log_file = os.path.join(self.log_dir, self.sample_id, "scores.pkl") 
         invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
         img_dir = os.path.join(self.log_dir, "images")
         
