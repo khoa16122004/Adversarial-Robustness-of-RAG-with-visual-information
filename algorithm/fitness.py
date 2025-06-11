@@ -26,7 +26,7 @@ class MultiScore:
         retrieval_result = self.retriever(self.question, adv_imgs)
         reader_result = self.reader(self.question, adv_imgs, self.answer)
 
-        retri_scores = np.array(self.retri_clean_reuslt) / np.array(retrieval_result)
-        reader_scores = np.array(reader_result) / np.array(self.reader_clean_result)
+        retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
+        reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
         return retri_scores, reader_scores
