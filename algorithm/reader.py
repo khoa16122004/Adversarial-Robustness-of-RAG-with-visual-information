@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     score = reader("what is color of the eyes of bird?", 
                    [img_files[3]], 
-                   "The bird in the image has blue eyes.")
+                   "The bird in the image has yellow eyes.")
 
     print(score)  # Should print the score or log probability of the answer.        
 
