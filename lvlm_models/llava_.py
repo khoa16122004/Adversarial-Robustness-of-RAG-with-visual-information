@@ -85,15 +85,12 @@ class LLava:
         input_with_answer = torch.cat([input_ids, answer_ids], dim=1)
         labels = input_with_answer.clone()
         
-        # Mask phần prompt (không tính loss ở đó)
         labels[0, :input_ids.shape[1]] = IGNORE_INDEX
 
-        # Xử lý ảnh
         image_tensors = process_images(imgs, self.image_processor, self.model.config)
         image_tensors = [_image.to(dtype=torch.float16, device=self.device) for _image in image_tensors]
         image_sizes = [image.size for image in imgs]
 
-        # Tính loss
         with torch.no_grad():
             output = self.model(
                 input_ids=input_with_answer,
