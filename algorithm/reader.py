@@ -58,6 +58,8 @@ if __name__ == "__main__":
     
     outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[3]])
     print(outputs)  # Should print the answer to the question based on the image provided.
-    score = reader("what is color of the eyes of bird?", [img_files[3]], "orange")
+    score = reader("what is color of the eyes of bird?", 
+                   [img_files[3]], 
+                   "The bird in the image has orange eyes.")
     print(score)  # Should print the score or log probability of the answer.        
         
