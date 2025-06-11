@@ -4,6 +4,8 @@ from copy import deepcopy
 import numpy as np
 import os
 import pickle
+from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
+
 class GA:
     def __init__(self, population_size, mutation_rate, F, n_k, w, h, max_iter, tournament_size, fitness, std):
         self.population_size = population_size
@@ -104,6 +106,8 @@ class NSGAII:
         self.fitness = fitness  # function
         self.std = std
         self.log_dir = log_dir
+        self.nds = NonDominatedSorting()
+
         
 
     def gaussian_patch_mutation(self, P, std=0.2, patch_size=32):
