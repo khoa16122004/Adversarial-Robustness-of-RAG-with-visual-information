@@ -67,6 +67,6 @@ if __name__ == "__main__":
     ind = pkl.load(open(ind_path, "rb"))
     
     print("score: ", history)
-
+    print("ind: ", ind.shape)
     output = fitnesse(torch.tensor(ind))
     print("output: ", output)
