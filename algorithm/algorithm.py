@@ -108,7 +108,7 @@ class NSGAII:
         self.std = std
         self.nds = NonDominatedSorting()
         self.sample_id = sample_id
-        self.log_dir = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}")
+        self.log_dir = os.path.join(log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}")
         os.makedirs(self.log_dir, exist_ok=True)
 
         
