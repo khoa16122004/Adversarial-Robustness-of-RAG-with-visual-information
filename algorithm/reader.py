@@ -2,7 +2,6 @@ import os
 import sys
 import torch
 from PIL import Image
-sys.path.append('..')
 
 from utils import DataLoader
 
