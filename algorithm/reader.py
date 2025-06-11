@@ -32,11 +32,11 @@ class Reader(torch.nn.Module):
         return outputs
     
     @torch.no_grad()
-    def forward(self, qs, img_files):
+    def forward(self, qs, img_files, answer):
         # []
         all_outputs = []
         for img in img_files:
-            output = self.model.compute_log_prob(qs, [img], self.answer)
+            output = self.model.compute_log_prob(qs, [img], answer)
             all_outputs.append(output)
             
             
@@ -56,6 +56,6 @@ if __name__ == "__main__":
     
     outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[3]])
     print(outputs)  # Should print the answer to the question based on the image provided.
-    score = reader("what is color of the eyes of bird?", [img_files[3]])
+    score = reader("what is color of the eyes of bird?", [img_files[3]], "orange")
     print(score)  # Should print the score or log probability of the answer.        
         
