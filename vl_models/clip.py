@@ -18,7 +18,7 @@ class CLIPModel(VisionModel):
         # self.model = HFCLIPModel.from_pretrained(self.pretrained,
         #                                          use_safetensors=True,
         #                                          ).to(self.device)
-        self.model = HFCLIPModel.from_pretrained("/home/elo/.cache/huggingface/hub/models--openai--clip-vit-large-patch14-336/snapshots/ce19dc912ca5cd21c8a653c79e251e808ccabcd1")
+        self.model = HFCLIPModel.from_pretrained("/home/elo/.cache/huggingface/hub/models--openai--clip-vit-large-patch14-336/snapshots")
         self.processor = CLIPProcessor.from_pretrained(self.pretrained)
 
     def extract_visual_features(self, imgs: List[Image.Image]):
