@@ -106,9 +106,10 @@ class NSGAII:
         self.max_iter = max_iter
         self.fitness = fitness  # function
         self.std = std
-        self.log_dir = log_dir
         self.nds = NonDominatedSorting()
         self.sample_id = sample_id
+        self.log_dir = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}")
+        os.makedirs(self.log_dir, exist_ok=True)
 
         
 
@@ -171,7 +172,7 @@ class NSGAII:
     def solve(self):
         # P = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() * self.std
         P = torch.rand(self.population_size, 3, self.w, self.h).cuda() * self.std
-        P_retri_score, P_reader_score = self.fitness(P)
+        P_retri_score, P_reader_score, P_adv_imgs = self.fitness(P)
         
 
         self.history = []
@@ -203,20 +204,20 @@ class NSGAII:
             # print(x1.shape, x2.shape, x3.shape)
             
             v = x1 + self.F * (x2 - x3)
-            v = torch.clamp(v, -self.std, self.std)
-            O = self.gaussian_patch_mutation(v)
+            O = torch.clamp(v, -self.std, self.std)
+            # O = self.gaussian_patch_mutation(O)
 
 
             # print("Off string shape: ", O.shape)
             # calculate new fitness
-            O_retri_score, O_reader_score = self.fitness(O)
+            O_retri_score, O_reader_score, O_adv_imgs = self.fitness(O)
             
             # pool
             pool = torch.cat([P, O], dim=0)  # (population_size, 2, ...)
             pool_retri_score = np.concatenate([P_retri_score, O_retri_score], axis=0)  # (population_size, 2)
             pool_reader_score = np.concatenate([P_reader_score, O_reader_score], axis=0)  # (population_size, 2)
             pool_fitness = np.column_stack((pool_retri_score, pool_reader_score))  # (population_size, 2)
-         
+            pool_adv_imgs = P_adv_imgs + O_adv_imgs
             # print("Pool shape: ", pool.shape)
             # print("Pool fitness shape: ", pool_fitness.shape)
             # print("Pool retri score shape: ", pool_retri_score.shape)
@@ -234,23 +235,32 @@ class NSGAII:
             rank_0_individuals = pool[rank_0_indices]
             rank_0_retri_scores = pool_retri_score[rank_0_indices]
             rank_0_reader_scores = pool_reader_score[rank_0_indices]  
+            rank_0_adv_imgs = [pool_adv_imgs[i] for i in rank_0_indices]
            
             self.history.append(np.column_stack([rank_0_retri_scores, rank_0_reader_scores]))
             self.best_individual = rank_0_individuals
             self.best_retri_score = rank_0_retri_scores
             self.best_reader_score = rank_0_reader_scores 
+            self.rank_0_adv_imgs = rank_0_adv_imgs
+            
         
         self.save_logs()
         
     def save_logs(self):
-        score_log_file = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}_{self.sample_id}.pkl")
-        invidual_log_file = os.path.join(self.log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}_{self.sample_id}_individuals.pkl")
+        
+        score_log_file = os.path.join(self.log_dir, "scores.pkl") 
+        invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
+        img_dir = os.path.join(self.log_dir, "images")
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)
         
         with open(invidual_log_file, 'wb') as f:
             pickle.dump(self.best_individual, f)
+            
+        os.makedirs(img_dir, exist_ok=True)
+        for i, img in enumerate(self.rank_0_adv_imgs):
+            img.save(os.path.join(img_dir, f"{i}.png"))
         
     
     def NSGA_selection(self, pool_fitness):
