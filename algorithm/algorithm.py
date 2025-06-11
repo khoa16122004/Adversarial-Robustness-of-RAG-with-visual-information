@@ -172,9 +172,9 @@ class NSGAII:
 
         for iter in range(self.max_iter):
             
-            print("Population shape: ", P.shape)
-            print("Population retri score shape: ", P_retri_score.shape)
-            print("Population reader score shape: ", P_reader_score.shape)
+            # print("Population shape: ", P.shape)
+            # print("Population retri score shape: ", P_retri_score.shape)
+            # print("Population reader score shape: ", P_reader_score.shape)
             
             
             # create offspring
@@ -201,8 +201,7 @@ class NSGAII:
             O = self.gaussian_patch_mutation(v)
 
 
-            print("Off string shape: ", O.shape)
-            
+            # print("Off string shape: ", O.shape)
             # calculate new fitness
             O_retri_score, O_reader_score = self.fitness(O)
             
@@ -212,14 +211,14 @@ class NSGAII:
             pool_reader_score = np.concatenate([P_reader_score, O_reader_score], axis=0)  # (population_size, 2)
             pool_fitness = np.column_stack((pool_retri_score, pool_reader_score))  # (population_size, 2)
          
-            print("Pool shape: ", pool.shape)
-            print("Pool fitness shape: ", pool_fitness.shape)
-            print("Pool retri score shape: ", pool_retri_score.shape)
-            print("Pool reader score shape: ", pool_reader_score.shape)
+            # print("Pool shape: ", pool.shape)
+            # print("Pool fitness shape: ", pool_fitness.shape)
+            # print("Pool retri score shape: ", pool_retri_score.shape)
+            # print("Pool reader score shape: ", pool_reader_score.shape)
          
          
             # NSGA-II selection
-            selected_indices, fronts = self.NSGAII_selection(pool_fitness)
+            selected_indices, fronts = self.NSGA_selection(pool_fitness)
             P_retri_score = pool_retri_score[selected_indices]
             P_reader_score = pool_reader_score[selected_indices]
             P = pool[selected_indices]
