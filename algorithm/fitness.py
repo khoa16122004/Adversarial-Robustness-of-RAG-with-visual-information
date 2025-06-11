@@ -53,7 +53,7 @@ if __name__ == "__main__":
     sample_id = 183
     question, answer, paths, gt_paths = loader.take_data(sample_id)
     img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
-    fitness = MultiScore(reader_name="llava", 
+    fitnesse = MultiScore(reader_name="llava", 
                         retriever_name="clip", 
                         question=question, 
                         original_img=img_files[3], 
@@ -69,5 +69,5 @@ if __name__ == "__main__":
     
     print("score: ", history)
 
-    output = fitness(ind)
+    output = fitnesse(ind)
     print("output: ", output)
