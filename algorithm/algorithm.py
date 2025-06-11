@@ -231,7 +231,7 @@ class NSGAII:
             
             
             rank_0_indices = fronts[0]  # Get indices of the first Pareto front
-            rank_0_individuals = [pool[i] for i in rank_0_indices]
+            rank_0_individuals = pool[rank_0_indices]
             rank_0_retri_scores = pool_retri_score[rank_0_indices]
             rank_0_reader_scores = pool_reader_score[rank_0_indices]  
            
