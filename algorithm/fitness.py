@@ -6,6 +6,12 @@ from reader import Reader
 import numpy as np
 import pickle as pkl
 from util import arkiv_proccess
+from PIL import Image
+import sys
+sys.path.append('..')
+from utils import DataLoader
+from fitness import MultiScore
+
 class MultiScore:
     def __init__(self, reader_name, retriever_name, question, original_img, answer):
         self.reader = Reader(reader_name)
@@ -35,6 +41,26 @@ class MultiScore:
     
     
 if __name__ == "__main__":
+    # repair
+    
+    annotation_path = "../v1_anno.jsonl"
+    dataset_dir = "../../extracted/train"
+    loader = DataLoader(path=annotation_path,
+                        img_dir=dataset_dir)  
+    w = 224
+    h = 224
+    
+    sample_id = 183
+    question, answer, paths, gt_paths = loader.take_data(sample_id)
+    img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
+    fitness = MultiScore(reader_name="llava", 
+                        retriever_name="clip", 
+                        question=question, 
+                        original_img=img_files[3], 
+                        answer="The bird in the image has orange eyes.")    
+    
+    
+    
     ind_path = "logs/clip_llava_0.01_183_individuals.pkl"
     score_path = "logs/clip_llava_0.01_183.pkl"
     
@@ -42,6 +68,6 @@ if __name__ == "__main__":
     ind = pkl.load(open(ind_path, "rb"))
     
     print("score: ", history)
-    print(ind[0].shape)
-    pass
-    
+
+    output = fitness(ind)
+    print("output: ", output)
