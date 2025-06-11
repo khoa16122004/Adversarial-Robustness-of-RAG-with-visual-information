@@ -22,6 +22,7 @@ class DataLoader:
         return question, answer, paths, gt_paths
 
 
+
 def s(x, y):
     return F.cosine_similarity(x, y, dim=-1).mean().item()
     
