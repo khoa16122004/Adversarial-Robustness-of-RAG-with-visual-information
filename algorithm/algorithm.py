@@ -106,7 +106,14 @@ class NSGAII:
         self.log_dir = log_dir
         
 
-
+    def gaussian_patch_mutation(self, P, std=0.2, patch_size=32):
+        P_ = deepcopy(P)
+        _, _, H, W = P.shape
+        x = torch.randint(0, W - patch_size, (1,))
+        y = torch.randint(0, H - patch_size, (1,))
+        noise = torch.randn_like(P[:, :, y:y+patch_size, x:x+patch_size]) * std
+        P_[:, :, y:y+patch_size, x:x+patch_size] += noise
+        return P_
 
     def calculating_crowding_distance(self, F):
         infinity = 1e+14
@@ -191,11 +198,8 @@ class NSGAII:
             
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
-            print(v.shape)
-            raise
-            mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) < self.mutation_rate
-            mask[:, :, 0] = False  # không mutate kênh đầu tiên
-            O = torch.where(mask.cuda(), v, P)
+            O = self.gaussian_patch_mutation(v)
+
 
             print("Off string shape: ", O.shape)
             
