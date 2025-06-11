@@ -187,6 +187,8 @@ class NSGAII:
             x2 = deepcopy(P[r2])
             x3 = deepcopy(P[r3])
 
+            print(x1.shape, x2.shape, x3.shape)
+            
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
             mask = torch.rand(self.population_size, self.n_k, 3, self.w, self.h) < self.mutation_rate
