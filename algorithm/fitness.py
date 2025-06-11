@@ -64,7 +64,7 @@ if __name__ == "__main__":
     score_path = "logs/clip_llava_0.01_183.pkl"
     
     history = pkl.load(open(score_path, "rb"))[-1]
-    ind = torch.cat(pkl.load(open(ind_path, "rb")))
+    ind = torch.cat(pkl.load(open(ind_path, "rb")), dim=0)
   
     
     print("score: ", history)
