@@ -73,44 +73,33 @@ class LLava:
     
     
     def compute_log_prob(self, question, imgs, answer):
-        # Bước 1: Chuẩn bị prompt từ câu hỏi
         conv = copy.deepcopy(conv_templates["qwen_1_5"])
         conv.append_message(conv.roles[0], question)
         conv.append_message(conv.roles[1], None)
         prompt = conv.get_prompt()
 
-        # Bước 2: Tokenize prompt và answer
-        prompt_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
+        input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
         answer_ids = self.tokenizer.encode(answer, add_special_tokens=False, return_tensors="pt").to(self.device)
 
-        # Bước 3: Ghép prompt + answer
-        input_ids = torch.cat([prompt_ids, answer_ids], dim=1)
+        full_ids = torch.cat([input_ids, answer_ids], dim=1)
 
-        # Bước 4: Xử lý ảnh
+        # Image pre-processing
         image_tensors = process_images(imgs, self.image_processor, self.model.config)
-        image_tensors = [img.to(dtype=torch.float16, device=self.device) for img in image_tensors]
-        image_sizes = [img.size for img in imgs]
+        image_tensors = [_image.to(dtype=torch.float16, device=self.device) for _image in image_tensors]
+        image_sizes = [image.size for image in imgs]
 
-        # Bước 5: Forward pass
+        # Forward pass
         with torch.no_grad():
-            outputs = self.model(
-                input_ids=input_ids,
-                images=image_tensors,
-                image_sizes=image_sizes,
-                return_dict=True,
-            )
-            logits = outputs.logits[0]  # (seq_len, vocab_size)
+            outputs = self.model(full_ids, images=image_tensors, image_sizes=image_sizes)
+            logits = outputs.logits[0]
 
-        # Bước 6: Cắt ra phần logit của câu trả lời
-        prompt_len = prompt_ids.shape[1]
+        prompt_len = input_ids.shape[1]
         answer_logits = logits[prompt_len-1 : prompt_len-1 + answer_ids.shape[1]]
-
-        # Bước 7: Tính log probs
         log_probs = F.log_softmax(answer_logits, dim=-1)
+
         answer_tokens = answer_ids.squeeze(0)
         token_log_probs = log_probs.gather(1, answer_tokens.unsqueeze(1)).squeeze(1)
 
-        # Bước 8: Tổng log_prob → xác suất
         total_log_prob = token_log_probs.sum()
         prob = torch.exp(total_log_prob).item()
 
