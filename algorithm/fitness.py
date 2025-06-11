@@ -68,7 +68,7 @@ if __name__ == "__main__":
     adv_img_tensors = ind + fitnesse.original_img_tensor
     adv_img_tensors = adv_img_tensors.clamp(0, 1)
     adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
-    
+    adv_imgs.append(fitnesse.original_img)
     outputs = []
     for img in adv_imgs:
         output = fitnesse.reader.image_to_text(question, [img])
