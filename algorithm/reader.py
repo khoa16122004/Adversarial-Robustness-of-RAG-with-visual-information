@@ -15,7 +15,7 @@ class Reader(torch.nn.Module):
             # simple template
             self.template = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways. <image>"
             self.model = LLava(
-                pretrained="llava-next-interleave-7b",
+                pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
             )
             
