@@ -5,7 +5,7 @@ from retriever import Retriever
 from reader import Reader
 import numpy as np
 import pickle as pkl
-
+from util import arkiv_proccess
 class MultiScore:
     def __init__(self, reader_name, retriever_name, question, original_img, answer):
         self.reader = Reader(reader_name)
@@ -35,9 +35,12 @@ class MultiScore:
     
     
 if __name__ == "__main__":
-    path = "logs/clip_llava_0.01_183_individuals.pkl"
-    ind = pkl.load(open(path, "rb"))
-    print(len(ind))
+    ind_path = "logs/clip_llava_0.01_183_individuals.pkl"
+    score_path = "logs/clip_llava_0.01_183.pkl"
+    
+    history = pkl.load(open(score_path, "rb"))[-1]
+    ind = pkl.load(open(ind_path, "rb"))
     print(ind[0].shape)
+    print(history.shape)
     pass
     
