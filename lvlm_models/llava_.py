@@ -102,13 +102,12 @@ class LLava:
                 image_sizes=image_sizes
             )
             logits = outputs.logits
-        
+            print(f"Logits shape: {logits.shape}, Input IDs shape: {input_ids.shape}, Answer IDs shape: {answer_ids.shape}")
             answer_logits = logits[:, input_ids.shape[-1]-1:-1, :]  # Align logits with answer tokens
-
+            print(f"Answer logits shape: {answer_logits.shape}")
             # Tính log-softmax để lấy log-probability cho từng token
             log_probs = F.log_softmax(answer_logits, dim=-1)
-
-            # Lấy log-probability tương ứng với từng token trong câu trả lời
+            print(f"Log probabilities shape: {log_probs.shape}")
             answer_log_probs = torch.gather(log_probs, 2, answer_ids.unsqueeze(0).unsqueeze(0)).squeeze()
 
             # Tổng log-probability (log likelihood) cho toàn bộ câu trả lời
