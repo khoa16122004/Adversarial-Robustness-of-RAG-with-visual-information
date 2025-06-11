@@ -20,7 +20,7 @@ class Reader(torch.nn.Module):
             )
             
     @torch.no_grad()
-    def image_to_text(self, qs, img_files, num_return_sequences=1, do_sample=False, temperature=0):
+    def image_to_text(self, qs, img_files):
   
         if not isinstance(img_files, list):
             img_files = [img_files]
