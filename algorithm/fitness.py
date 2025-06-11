@@ -71,7 +71,7 @@ if __name__ == "__main__":
     adv_imgs.append(fitnesse.original_img)
     outputs = []
     for i, img in enumerate(adv_imgs):
-        img.save(f"test_{i}.jpg")
+        img.save(f"")
         output = fitnesse.reader.image_to_text(question, [img])
         outputs.append(output)
     print("outputs: ", outputs)
