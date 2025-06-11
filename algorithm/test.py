@@ -25,8 +25,8 @@ h = 224
 max_iter = 10
 std = 0.05
 
-
-question, answer, paths, gt_paths = loader.take_data(183)
+sample_id = 183
+question, answer, paths, gt_paths = loader.take_data(sample_id)
 img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
 fitness = MultiScore(reader_name="llava", 
                      retriever_name="clip", 
@@ -43,7 +43,8 @@ algorithm = NSGAII(
     h=h,
     max_iter=max_iter,
     fitness=fitness,
-    std=std
+    std=std,
+    sample_id=sample_id
 )
 
 algorithm.solve()

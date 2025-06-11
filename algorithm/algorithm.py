@@ -94,6 +94,7 @@ class NSGAII:
                  max_iter, 
                  fitness, # multi score
                  std,
+                 sample_id,
                  log_dir="logs",
                  ):
         self.population_size = population_size
@@ -107,6 +108,7 @@ class NSGAII:
         self.std = std
         self.log_dir = log_dir
         self.nds = NonDominatedSorting()
+        self.sample_id = sample_id
 
         
 
