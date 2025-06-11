@@ -64,7 +64,12 @@ if __name__ == "__main__":
     score_path = "logs/clip_lava_0.1/scores.pkl"
     
     history = pkl.load(open(score_path, "rb"))[-1]
+    print("history: ", history)
     ind = torch.stack(pkl.load(open(ind_path, "rb")), dim=0)
+    fit_output = fitnesse(ind)
+    print("fitnesse: ", fit_output)
+    
+    
     adv_img_tensors = ind + fitnesse.original_img_tensor
     adv_img_tensors = adv_img_tensors.clamp(0, 1)
     adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]

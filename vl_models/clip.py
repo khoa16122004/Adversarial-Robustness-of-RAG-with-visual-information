@@ -7,8 +7,7 @@ from .model import VisionModel
 
 from dotenv import load_dotenv
 load_dotenv()  
-import os
-os.environ['CURL_CA_BUNDLE'] = ''
+
 class CLIPModel(VisionModel):
     def __init__(self, model_name: str = "clip", pretrained: str = "openai/clip-vit-large-patch14-336"):
         super().__init__(model_name, pretrained)
@@ -16,9 +15,10 @@ class CLIPModel(VisionModel):
         self.load_model()
 
     def load_model(self):
-        self.model = HFCLIPModel.from_pretrained(self.pretrained,
-                                                 use_safetensors=True,
-                                                 ).to(self.device)
+        # self.model = HFCLIPModel.from_pretrained(self.pretrained,
+        #                                          use_safetensors=True,
+        #                                          ).to(self.device)
+        self.model = CLIPModel(pretrained="/home/elo/.cache/huggingface/hub/models--openai--clip-vit-large-patch14-336")
         self.processor = CLIPProcessor.from_pretrained(self.pretrained)
 
     def extract_visual_features(self, imgs: List[Image.Image]):
