@@ -253,18 +253,18 @@ class NSGAII:
     
     def NSGA_selection(self, pool_fitness):
         
-        fronts = self.nds.do(pool_fitness, n_stop_if_ranked=self.pop.pop_size) # front ranked
+        fronts = self.nds.do(pool_fitness, n_stop_if_ranked=self.pop_size) # front ranked
         survivors = []
         for k, front in enumerate(fronts):
             crowding_of_front = self.calculating_crowding_distance(pool_fitness[front])
             sorted_indices = np.argsort(-crowding_of_front)
             front_sorted = [front[i] for i in sorted_indices]
             for idx in front_sorted:
-                if len(survivors) < self.pop.pop_size:
+                if len(survivors) < self.pop_size:
                     survivors.append(idx)
                 else:
                     break
-            if len(survivors) >= self.pop.pop_size:
+            if len(survivors) >= self.pop_size:
                 break
         return survivors, fronts
     
