@@ -1,8 +1,8 @@
 import torch
 from torchvision import transforms
 from torchvision.transforms.functional import to_pil_image
-from .retriever import Retriever
-from .reader import Reader
+from retriever import Retriever
+from reader import Reader
 import numpy as np
 
 class MultiScore:
