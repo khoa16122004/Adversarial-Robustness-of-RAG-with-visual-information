@@ -56,14 +56,14 @@ if __name__ == "__main__":
     question, answer, paths, gt_paths = loader.take_data(183)
     print(answer)
 
-    img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in gt_paths]
+    img_files = [Image.open(path).convert('RGB').resize((428, 428)) for path in gt_paths]
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Reader(model_name="llava")
     
-    outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[3]])
+    outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[2]])
     print(outputs)  # Should print the answer to the question based on the image provided.
     score = reader("what is color of the eyes of bird?", 
-                   [img_files[3]], 
+                   [img_files[2]], 
                    "The bird in the image has orange eyes.")
     print(score)  # Should print the score or log probability of the answer.        
 
