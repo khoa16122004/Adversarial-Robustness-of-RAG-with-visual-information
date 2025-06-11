@@ -40,7 +40,8 @@ if __name__ == "__main__":
     
     history = pkl.load(open(score_path, "rb"))[-1]
     ind = pkl.load(open(ind_path, "rb"))
+    
+    print("score: ", history)
     print(ind[0].shape)
-    print(history.shape)
     pass
     
