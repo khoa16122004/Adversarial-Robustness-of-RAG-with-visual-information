@@ -100,7 +100,7 @@ class LLava:
                 return_dict=True
             )
             logits = outputs.logits[0]  # Shape: [seq_len, vocab_size]
-
+        print(f"Logits shape: {outputs.logits}")
         # Step 6: Get logits corresponding to the answer tokens
         prompt_len = prompt_ids.shape[1]
         answer_logits = logits[prompt_len-1 : prompt_len-1 + answer_ids.shape[1]]
