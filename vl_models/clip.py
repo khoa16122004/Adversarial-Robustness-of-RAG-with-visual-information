@@ -7,6 +7,8 @@ from .model import VisionModel
 
 from dotenv import load_dotenv
 load_dotenv()  
+import os
+os.environ['CURL_CA_BUNDLE'] = ''
 class CLIPModel(VisionModel):
     def __init__(self, model_name: str = "clip", pretrained: str = "openai/clip-vit-large-patch14-336"):
         super().__init__(model_name, pretrained)
