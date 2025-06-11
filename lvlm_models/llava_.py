@@ -73,45 +73,44 @@ class LLava:
     
     
     def compute_log_prob(self, question, imgs, answer):
-        intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
-        prompt = f"{intruction}\n question {question}\n images <image>"
-        
+        # Step 1: Prepare prompt
         conv = copy.deepcopy(conv_templates["qwen_1_5"])
-        conv.append_message(conv.roles[0], prompt)
+        conv.append_message(conv.roles[0], question)
         conv.append_message(conv.roles[1], None)
-        prompt_input = conv.get_prompt()
+        prompt = conv.get_prompt()
 
+        # Step 2: Tokenize prompt and answer
+        prompt_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
+        answer_ids = self.tokenizer.encode(answer, add_special_tokens=False, return_tensors="pt").to(self.device)
 
-        input_ids = tokenizer_image_token(prompt_input, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
+        # Step 3: Process image
+        image_tensors = process_images(imgs, self.image_processor, self.model.config)
+        image_tensors = [img.to(dtype=torch.float16, device=self.device) for img in image_tensors]
+        image_sizes = [img.size for img in imgs]
 
-        if imgs:
-            image_tensors = process_images(imgs, self.image_processor, self.model.config)
-            image_tensors = [_image.to(dtype=torch.float16, device=self.device) for _image in image_tensors]
-            image_sizes = [image.size for image in imgs]
-        else:
-            image_tensors = None
-            image_sizes = None
+        # Step 4: Concatenate prompt + answer tokens
+        input_ids = torch.cat([prompt_ids, answer_ids], dim=1)
 
-        answer_ids = self.tokenizer(answer, return_tensors="pt").input_ids.to(self.device)
-        input_and_answer = torch.cat([input_ids, answer_ids], dim=-1)
-
+        # Step 5: Forward pass (disable gradients)
         with torch.no_grad():
             outputs = self.model(
-                input_ids=input_and_answer[:, :-1],
+                input_ids=input_ids,
                 images=image_tensors,
-                image_sizes=image_sizes
+                image_sizes=image_sizes,
+                return_dict=True
             )
-            logits = outputs.logits
-            print(f"Logits shape: {logits.shape}, Input IDs shape: {input_ids.shape}, Answer IDs shape: {answer_ids.shape}")
-            answer_logits = logits[:, input_ids.shape[-1]-1:-1, :]  # Align logits with answer tokens
-            print(f"Answer logits shape: {answer_logits.shape}")
-            # Tính log-softmax để lấy log-probability cho từng token
-            log_probs = F.log_softmax(answer_logits, dim=-1)
-            print(f"Log probabilities shape: {log_probs.shape}")
-            answer_log_probs = torch.gather(log_probs, 2, answer_ids.unsqueeze(0).unsqueeze(0)).squeeze()
+            logits = outputs.logits[0]  # Shape: [seq_len, vocab_size]
 
-            # Tổng log-probability (log likelihood) cho toàn bộ câu trả lời
-            log_prob_sum = answer_log_probs.sum().item()
+        # Step 6: Get logits corresponding to the answer tokens
+        prompt_len = prompt_ids.shape[1]
+        answer_logits = logits[prompt_len-1 : prompt_len-1 + answer_ids.shape[1]]
 
-            return log_prob_sum
+        log_probs = F.log_softmax(answer_logits, dim=-1)
+        answer_tokens = answer_ids.squeeze(0)  # Shape: [answer_len]
+        token_log_probs = log_probs.gather(1, answer_tokens.unsqueeze(1)).squeeze(1)
+
+        total_log_prob = token_log_probs.sum()
+        probability = torch.exp(total_log_prob).item()
+        return probability
+
         
