@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     img_files = [Image.open(path).convert('RGB').resize((224, 224)) for path in gt_paths]
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
-    reader = Retriever(model_name="llava")
+    reader = Retriever(model_name="clip")
     
     score = reader("orange eyes", [img_files[3]])
     print(score)
