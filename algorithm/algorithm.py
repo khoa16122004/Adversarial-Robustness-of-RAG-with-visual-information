@@ -188,6 +188,7 @@ class NSGAII:
             x3 = deepcopy(P[r3])
 
             print(x1.shape, x2.shape, x3.shape)
+            raise
             
             v = x1 + self.F * (x2 - x3)
             v = torch.clamp(v, -self.std, self.std)
