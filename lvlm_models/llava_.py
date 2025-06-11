@@ -73,12 +73,16 @@ class LLava:
     
     
     def compute_log_prob(self, question, imgs, answer):
+        intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
+        prompt = f"{intruction}\n question {question}\n images <image>"
+        
         conv = copy.deepcopy(conv_templates["qwen_1_5"])
-        conv.append_message(conv.roles[0], question)
+        conv.append_message(conv.roles[0], prompt)
         conv.append_message(conv.roles[1], None)
-        prompt = conv.get_prompt()
+        prompt_input = conv.get_prompt()
 
-        input_ids = tokenizer_image_token(prompt, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
+
+        input_ids = tokenizer_image_token(prompt_input, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
 
         if imgs:
             image_tensors = process_images(imgs, self.image_processor, self.model.config)
@@ -98,11 +102,17 @@ class LLava:
                 image_sizes=image_sizes
             )
             logits = outputs.logits
+        
+            answer_logits = logits[:, input_ids.shape[-1]-1:-1, :]  # Align logits with answer tokens
 
-        answer_logits = logits[:, input_ids.shape[-1]-1:-1, :]
-        target_ids = answer_ids
+            # Tính log-softmax để lấy log-probability cho từng token
+            log_probs = F.log_softmax(answer_logits, dim=-1)
 
-        log_probs = F.log_softmax(answer_logits, dim=-1)
-        selected_log_probs = log_probs.gather(2, target_ids.unsqueeze(-1)).squeeze(-1)
-        log_prob_sum = selected_log_probs.sum().item()
-        return log_prob_sum
+            # Lấy log-probability tương ứng với từng token trong câu trả lời
+            answer_log_probs = torch.gather(log_probs, 2, answer_ids.unsqueeze(0).unsqueeze(0)).squeeze()
+
+            # Tổng log-probability (log likelihood) cho toàn bộ câu trả lời
+            log_prob_sum = answer_log_probs.sum().item()
+
+            return log_prob_sum
+        

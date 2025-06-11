@@ -25,8 +25,10 @@ class Reader(torch.nn.Module):
         if not isinstance(img_files, list):
             img_files = [img_files]
         
+        # input
         intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
-        prompt = f"{intruction}\n question {qs}\n images <image> {img_files[0]}"
+        prompt = f"{intruction}\n question {qs}\n images <image>"
+        
         outputs = self.model(prompt, img_files)[0]
         
         return outputs
