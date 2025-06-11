@@ -36,7 +36,7 @@ class MultiScore:
         retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
         reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
-        return retri_scores, reader_scores
+        return retri_scores, reader_scores, adv_imgs
     
     
 if __name__ == "__main__":
