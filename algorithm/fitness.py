@@ -52,6 +52,7 @@ if __name__ == "__main__":
     
     sample_id = 183
     question, answer, paths, gt_paths = loader.take_data(sample_id)
+    question = "What is the coloration of pupil of Black-winged Kite (scientific name: Elanus caeruleus)?"
     img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
     fitnesse = MultiScore(reader_name="llava", 
                         retriever_name=None, 
