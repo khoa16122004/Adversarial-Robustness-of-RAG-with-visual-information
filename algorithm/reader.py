@@ -62,10 +62,8 @@ if __name__ == "__main__":
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Reader(model_name="llava")
     # data
-    ind_path = os.path.join('logs', 'clip_lava_0.1', 'individuals.pkl')
-
-    score_path = os.path.join('logs', 'clip_lava_0.1', 'scores.pkl')
-
+    ind_path = r"logs/clip_lava_0.1/individuals.pkl"
+    score_path = r"logs/clip_lava_0.1/scores.pkl"
     
     history = pkl.load(open(score_path, "rb"))[-1]
     print("history: ", history)
