@@ -63,8 +63,8 @@ if __name__ == "__main__":
     reader = Reader(model_name="llava")
 
     # data
-    ind_path = "logs/clip_lava_0.1/individuals.pkl"
-    score_path = "logs/clip_lava_0.1/scores.pkl"
+    ind_path = r"logs/clip_lava_0.1/individuals.pkl"
+    score_path = r"logs/clip_lava_0.1/scores.pkl"
     
     history = pkl.load(open(score_path, "rb"))[-1]
     print("history: ", history)
