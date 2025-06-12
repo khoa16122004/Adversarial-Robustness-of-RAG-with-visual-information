@@ -2,6 +2,7 @@ import os
 import sys
 import torch
 from PIL import Image
+import pickle as pkl
 sys.path.append('..')
 from utils import DataLoader
 
@@ -60,22 +61,30 @@ if __name__ == "__main__":
     img_files = [Image.open(path).convert('RGB').resize((428, 428)) for path in gt_paths]
     img_files[3].save("test_image.jpg")  # Save the image for testing purposes.
     reader = Reader(model_name="llava")
+
+    # data
+    ind_path = "logs/clip_lava_0.1/individuals.pkl"
+    score_path = "logs/clip_lava_0.1/scores.pkl"
     
+    history = pkl.load(open(score_path, "rb"))[-1]
+    print("history: ", history)
+    ind = torch.stack(pkl.load(open(ind_path, "rb")), dim=0)
+
     outputs = reader.image_to_text("what is color of the eyes of bird?", [img_files[3]])
-    print(outputs)  # Should print the answer to the question based on the image provided.
-    score = reader("what is color of the eyes of bird?", 
-                   [img_files[2]], 
-                   "The bird in the image has orange eyes.")
-    print(score)  # Should print the score or log probability of the answer.        
+    # print(outputs)  # Should print the answer to the question based on the image provided.
+    # score = reader("what is color of the eyes of bird?", 
+    #                [img_files[2]], 
+    #                "The bird in the image has orange eyes.")
+    # print(score)  # Should print the score or log probability of the answer.        
 
-    score = reader("what is color of the eyes of bird?", 
-                   [img_files[3]], 
-                   "The bird in the image has yellow eyes.")
+    # score = reader("what is color of the eyes of bird?", 
+    #                [img_files[3]], 
+    #                "The bird in the image has yellow eyes.")
 
-    print(score)  # Should print the score or log probability of the answer.        
+    # print(score)  # Should print the score or log probability of the answer.        
 
-    score = reader("what is color of the eyes of bird?", 
-                   [img_files[3]], 
-                   "dont know")
-    print(score)  # Should print the score or log probability of the answer.        
+    # score = reader("what is color of the eyes of bird?", 
+    #                [img_files[3]], 
+    #                "dont know")
+    # print(score)  # Should print the score or log probability of the answer.        
         

@@ -30,10 +30,11 @@ class MultiScore:
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
 
-        retrieval_result = self.retriever(self.question, adv_imgs)
+        # retrieval_result = self.retriever(self.question, adv_imgs)
         reader_result = self.reader(self.question, adv_imgs, self.answer)
 
-        retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
+        # retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
+        retri_scores = None
         reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
         return retri_scores, reader_scores, adv_imgs
@@ -53,7 +54,7 @@ if __name__ == "__main__":
     question, answer, paths, gt_paths = loader.take_data(sample_id)
     img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
     fitnesse = MultiScore(reader_name="llava", 
-                        retriever_name="clip", 
+                        retriever_name=None, 
                         question=question, 
                         original_img=img_files[3], 
                         answer="The bird in the image has orange eyes.")    
