@@ -17,7 +17,7 @@ class MultiScore:
         self.retriever = Retriever(retriever_name)
         self.original_img = original_img
         self.original_img_tensor = transforms.ToTensor()(original_img).cuda()
-        self.retri_clean_reuslt = self.retriever(question, [original_img])
+        # self.retri_clean_reuslt = self.retriever(question, [original_img])
         self.reader_clean_result = self.reader(question, [original_img], answer)
         self.answer = answer
         self.question = question
