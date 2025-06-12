@@ -66,7 +66,7 @@ if __name__ == "__main__":
     
     history = pkl.load(open(score_path, "rb"))[-1]
     print("history: ", history)
-    ind = torch.stack(pkl.load(open(ind_path, "rb")), dim=0)
+    ind = pkl.load(open(ind_path, "rb"))
     fit_output = fitnesse(ind)
     print("fitnesse: ", fit_output)
     
