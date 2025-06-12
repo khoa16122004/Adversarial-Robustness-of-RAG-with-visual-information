@@ -7,11 +7,10 @@ import pickle
 from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
 
 class GA:
-    def __init__(self, population_size, mutation_rate, F, n_k, w, h, max_iter, tournament_size, fitness, std):
+    def __init__(self, population_size, mutation_rate, F, w, h, max_iter, tournament_size, fitness, std):
         self.population_size = population_size
         self.mutation_rate = mutation_rate
         self.F = F
-        self.n_k = n_k
         self.w = w
         self.h = h
         self.max_iter = max_iter
@@ -88,7 +87,6 @@ class NSGAII:
                  population_size, 
                  mutation_rate, 
                  F, 
-                 n_k, 
                  w, 
                  h,
                  max_iter, 
@@ -100,7 +98,6 @@ class NSGAII:
         self.population_size = population_size
         self.mutation_rate = mutation_rate
         self.F = F
-        self.n_k = n_k # set = 1
         self.w = w
         self.h = h
         self.max_iter = max_iter
@@ -170,7 +167,6 @@ class NSGAII:
 
 
     def solve(self):
-        # P = torch.rand(self.population_size, self.n_k, 3, self.w, self.h).cuda() * self.std
         P = torch.rand(self.population_size, 3, self.w, self.h).cuda() * self.std
         P_retri_score, P_reader_score, P_adv_imgs = self.fitness(P)
         
@@ -247,10 +243,10 @@ class NSGAII:
         self.save_logs()
         
     def save_logs(self):
-        
         score_log_file = os.path.join(self.log_dir, self.sample_id, "scores.pkl") 
         invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
         img_dir = os.path.join(self.log_dir, "images")
+        self.fitness.original_image.save(os.path.join(self.log_dir, "original.png"))
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)

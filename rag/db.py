@@ -39,7 +39,7 @@ class Database:
                 batch_imgs = []
                 for j, file_path in enumerate(batch_files):
                     try:
-                        img = Image.open(file_path).convert("RGB")
+                        img = Image.open(file_path).convert("RGB").resize((312, 312))
                         batch_imgs.append(img)
                     except:
                         fail_f.write(file_path + "\n")
