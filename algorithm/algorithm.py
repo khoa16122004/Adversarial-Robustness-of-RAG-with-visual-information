@@ -247,7 +247,7 @@ class NSGAII:
         score_log_file = os.path.join(self.log_dir, self.sample_id, "scores.pkl") 
         invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
         img_dir = os.path.join(self.log_dir, "images")
-        self.fitness.original_image.save(os.path.join(self.log_dir, "original.png"))
+        self.fitness.original_img.save(os.path.join(self.log_dir, "original.png"))
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)
