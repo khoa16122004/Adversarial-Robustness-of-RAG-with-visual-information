@@ -48,7 +48,7 @@ def main(args):
             max_iter=args.max_iter,
             fitness=fitness,
             std=args.std,
-            sample_id=i
+            sample_id=str(i)
         )
 
         algorithm.solve()
