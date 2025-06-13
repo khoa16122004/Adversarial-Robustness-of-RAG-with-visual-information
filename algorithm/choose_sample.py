@@ -25,8 +25,9 @@ def main(args):
     )
 
     keyword_prompt = (
-        "From the question below, extract only the essential visual keywords, such as 'claws', 'tail', 'horns', 'fur', etc.\n"
-        "Exclude any animal names or species. Return only a short list (2–3) of comma-separated keywords.\n\n"
+        "Extract 2 to 3 main visual keywords from the question below, such as 'claws', 'tail', 'horns', 'fur', etc.\n"
+        "Do not include any animal names or species.\n"
+        "Return only the keywords, separated by commas.\n\n"
         "Question: {question}"
     )
 
