@@ -30,6 +30,7 @@ def s(x, y):
 if __name__ == "__main__":
     loader = DataLoader(path=r'v1_anno.jsonl',
                         img_dir=r'../extracted/train')
+    
     question, answer, paths, gt_path = loader.take_data(183)
     
     print(gt_path)    
