@@ -48,12 +48,22 @@ def main(args):
         individual = pkl.load(open(individual_path, "rb"))
     
     P_retri_score, P_reader_score, P_adv_imgs = fitness(individual)
-    print("score: ", history)
-    print("rerun score: ", P_retri_score, P_reader_score)
+    # print("score: ", history)
+    # print("rerun score: ", P_retri_score, P_reader_score)
     
-    P_adv_imgs.append(fitness.original_img)
+    # greedy selection
+    filtered = history[history[:, 0] < 1]
+    if len(filtered) > 0:
+        min_idx = torch.argmin(filtered[:, 1])
+        result = filtered[min_idx]
+        print("Score greedy: ", result)
+    else:
+        print("Không có dòng nào thỏa mãn điều kiện.")
+    
+    
+    imgs = [P_adv_imgs[min_idx], fitness.original_img]
     outputs = []
-    for i, img in enumerate(P_adv_imgs):
+    for i, img in enumerate(imgs):
         output = fitness.reader.image_to_text(question, [img])
         outputs.append(output)
     
