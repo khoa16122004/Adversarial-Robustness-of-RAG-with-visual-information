@@ -58,7 +58,7 @@ def main(args):
         top1_img = corpus[sim_scores.argmax()]
         
         # answer form top1 documents
-        top1_answer = fitness.reader.image_to_text(question, [top1_img])[0]
+        top1_answer = fitness.reader.image_to_text(question, [top1_img])
         print("Answer: ", top1_answer)
         print("GT: ", answer)
         # check answer
