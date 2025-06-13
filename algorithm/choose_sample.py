@@ -9,7 +9,7 @@ from utils import DataLoader
 from fitness import MultiScore
 from algorithm import NSGAII
 from llm_service import LlamaService
-
+from tqdm import tqdm
 
 def main(args):
     # outptu path
@@ -41,7 +41,7 @@ def main(args):
 
 
     
-    for i in range(len(loader)):    
+    for i in tqdm(range(len(loader))):    
         question, answer, paths, gt_paths = loader.take_data(i)
         
         corpus = []
