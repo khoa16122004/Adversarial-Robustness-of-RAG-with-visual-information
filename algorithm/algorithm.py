@@ -175,9 +175,9 @@ class NSGAII:
 
         for iter in range(self.max_iter):
             
-            print("Population shape: ", P.shape)
-            print("Population retri score shape: ", P_retri_score.shape)
-            print("Population reader score shape: ", P_reader_score.shape)
+            # print("Population shape: ", P.shape)
+            # print("Population retri score shape: ", P_retri_score.shape)
+            # print("Population reader score shape: ", P_reader_score.shape)
             
             
             # create offspring
@@ -197,17 +197,17 @@ class NSGAII:
             x2 = deepcopy(P[r2])
             x3 = deepcopy(P[r3])
 
-            print(x1.shape, x2.shape, x3.shape)
+            # print(x1.shape, x2.shape, x3.shape)
             
             v = x1 + self.F * (x2 - x3)
             O = torch.clamp(v, -self.std, self.std)
             # O = self.gaussian_patch_mutation(O)
 
 
-            print("Off string shape: ", O.shape)
+            # print("Off string shape: ", O.shape)
             # calculate new fitness
             O_retri_score, O_reader_score, O_adv_imgs = self.fitness(O)
-            print("Off string retri score shape: ", O_retri_score.shape)
+            # print("Off string retri score shape: ", O_retri_score.shape)
             
             # pool
             pool = torch.cat([P, O], dim=0)  # (population_size, 2, ...)
