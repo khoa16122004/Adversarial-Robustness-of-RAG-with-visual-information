@@ -197,3 +197,4 @@ cython_debug/
 /output/*
 # split_corpus
 algorithm/clip_llava_0.1
+algorithm/jerry_pick

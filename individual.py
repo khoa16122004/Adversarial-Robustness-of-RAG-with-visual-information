@@ -3,7 +3,7 @@ import os
 import json
 from typing import List
 from torch import Tensor
-from vl_models.clip import CLIPModel
+from vl_models.clip_ import CLIPModel
 from PIL import Image
 from torchvision import transforms
 from fitness import RetrievalObjective

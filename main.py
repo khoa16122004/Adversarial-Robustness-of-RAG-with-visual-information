@@ -3,7 +3,7 @@ import argparse
 from individual import OriginalTop, Individual
 from torchvision import transforms  
 from fitness import RetrievalObjective
-from vl_models.clip import CLIPModel
+from vl_models.clip_ import CLIPModel
 import os
 from attack import POPOP
 

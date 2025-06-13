@@ -218,7 +218,7 @@ class POPOP(GABase):
             return tournament_selection(population, fitness_scores)
 
 if __name__ == "__main__":
-    from vl_models.clip import CLIPModel
+    from vl_models.clip_ import CLIPModel
 
     config = Config("config.json")
     model = CLIPModel()
