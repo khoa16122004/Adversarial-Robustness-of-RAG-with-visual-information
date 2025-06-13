@@ -42,10 +42,15 @@ def main(args):
 
     
     for i in range(len(loader)):    
-        
-        
         question, answer, paths, gt_paths = loader.take_data(i)
-        corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
+        
+        corpus = []
+        for path in paths:
+            try:
+                image = Image.open(path).convert('RGB').resize((args.w, args.h))
+                corpus.append(image)
+            except:
+                continue
         
         # top1 documents
         sim_scores = fitness.retriever(question, corpus)
