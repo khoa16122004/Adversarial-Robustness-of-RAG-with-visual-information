@@ -52,19 +52,20 @@ def main(args):
     # print("rerun score: ", P_retri_score, P_reader_score)
     
     # greedy selection
-    filtered = history[history[:, 0] < 1]
-    print(filtered)
-    if len(filtered) > 0:
-        min_idx = np.argmin(filtered[:, 1])
-        result = filtered[min_idx]
-        print("Score greedy: ", result)
-    else:
-        print("Không có dòng nào thỏa mãn điều kiện.")
+    # filtered = history[history[:, 0] < 1]
+    # print(filtered)
+    # if len(filtered) > 0:
+    #     min_idx = np.argmin(filtered[:, 1])
+    #     result = filtered[min_idx]
+    #     print("Score greedy: ", result)
+    # else:
+    #     print("Không có dòng nào thỏa mãn điều kiện.")
     
     
-    imgs = [P_adv_imgs[min_idx], fitness.original_img]
+    # imgs = [P_adv_imgs[min_idx], fitness.original_img]
+    P_adv_imgs.append(fitness.original_img)
     outputs = []
-    for i, img in enumerate(imgs):
+    for i, img in enumerate(P_adv_imgs):
         output = fitness.reader.image_to_text(question, [img])
         outputs.append(output)
     
