@@ -25,12 +25,12 @@ def main(args):
     system_prompt = (
         "You are an assistant that helps me compare two answers for a QA task. "
         "One answer is the ground truth, and the other is the model's prediction.\n"
-        "You will return 'True' if the model answer matches the ground truth, otherwise 'False'."
+        "You will return 'True' if the model answer matches one of the answers in the ground truth list, otherwise 'False'."
     )
     
     prompt = (
         "Question: {question}\n"
-        "Ground Truth Answer: {gt_answer}\n"
+        "Ground Truth Answers: {gt_answer}\n"
         "Model Answer: {model_answer}\n"
         )
     
@@ -77,7 +77,8 @@ def main(args):
                 f.write(question)
             
             with open(os.path.join(sample_dir, "answer.txt"), "w") as f:
-                f.write(answer)
+                for item in answer:
+                    f.write(item + "\n")
             
             with open(os.path.join(sample_dir, "top1_answer.txt"), "w") as f:
                 f.write(top1_answer)
