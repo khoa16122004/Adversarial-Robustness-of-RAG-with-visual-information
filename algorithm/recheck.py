@@ -53,6 +53,7 @@ def main(args):
     
     # greedy selection
     filtered = history[history[:, 0] < 1]
+    print(filtered)
     if len(filtered) > 0:
         min_idx = torch.argmin(filtered[:, 1])
         result = filtered[min_idx]
