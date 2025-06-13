@@ -71,6 +71,5 @@ if __name__ == "__main__":
     parser.add_argument("--n_k", type=int, default=1, help="Number of attack")
     parser.add_argument("--max_iter", type=int, default=100, help="Maximum iterations")
     parser.add_argument("--std", type=float, default=0.1, help="Standard deviation for initialization")
-
     args = parser.parse_args()
     main(args)
