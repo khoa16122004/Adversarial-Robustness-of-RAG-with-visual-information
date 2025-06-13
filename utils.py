@@ -20,6 +20,9 @@ class DataLoader:
                 gt_paths.append(img_path)
                 
         return question, answer, paths, gt_paths
+    
+    def __len__(self):
+        return len(self.data)
 
 
 

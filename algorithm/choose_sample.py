@@ -39,10 +39,9 @@ def main(args):
                          retriever_name="clip"
                          )
 
-    with open(args.sample_id_path) as f:
-        lines = [line.strip() for line in f.readlines()]
+
     
-    for i in lines:    
+    for i in range(len(loader)):    
         
         
         question, answer, paths, gt_paths = loader.take_data(i)
