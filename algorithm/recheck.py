@@ -55,7 +55,7 @@ def main(args):
     filtered = history[history[:, 0] < 1]
     print(filtered)
     if len(filtered) > 0:
-        min_idx = np(filtered[:, 1])
+        min_idx = np.argmin(filtered[:, 1])
         result = filtered[min_idx]
         print("Score greedy: ", result)
     else:
