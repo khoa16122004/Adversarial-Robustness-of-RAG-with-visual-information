@@ -52,6 +52,8 @@ def main(args):
             except:
                 continue
         
+        print(corpus)
+        
         # top1 documents
         sim_scores = fitness.retriever(question, corpus)
         top1_img = corpus[sim_scores.argmax()]
