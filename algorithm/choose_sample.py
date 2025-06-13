@@ -52,7 +52,6 @@ def main(args):
             except:
                 continue
         
-        print(corpus)
         
         # top1 documents
         sim_scores = fitness.retriever(question, corpus)
