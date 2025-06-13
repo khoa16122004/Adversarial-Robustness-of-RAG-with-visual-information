@@ -67,7 +67,7 @@ def main(args):
             recheck = llm.text_to_text(
                 system_prompt=system_prompt,
                 prompt=prompt.format(question=question, gt_answer=answer, model_answer=top1_answer)
-            )
+            )[0]
         
         if recheck == "True":
             sample_dir = os.path.join(output_dir, i)
