@@ -25,7 +25,7 @@ def main(args):
     system_prompt = (
         "You are an assistant that helps me compare two answers for a QA task. "
         "One answer is the ground truth, and the other is the model's prediction.\n"
-        "You will return True if the model answer matches the ground truth, otherwise False."
+        "You will return "True" if the model answer matches the ground truth, otherwise "False"."
     )
     
     prompt = (
