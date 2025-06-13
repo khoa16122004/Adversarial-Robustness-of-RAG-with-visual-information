@@ -22,7 +22,7 @@ def main(args):
                          )
 
     with open(args.sample_id_path) as f:
-        lines = [line.strip() for line in f.readlines()]
+        lines = [int(line.strip()) for line in f.readlines()]
     
     for i in lines:    
         question, answer, paths, gt_paths = loader.take_data(i)
