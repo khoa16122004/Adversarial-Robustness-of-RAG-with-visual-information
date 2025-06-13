@@ -244,7 +244,7 @@ class NSGAII:
         self.save_logs()
         
     def save_logs(self):
-        score_log_file = os.path.join(self.log_dir, self.sample_id, "scores.pkl") 
+        score_log_file = os.path.join(self.log_dir, "scores.pkl") 
         invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
         img_dir = os.path.join(self.log_dir, "images")
         self.fitness.original_img.save(os.path.join(self.log_dir, "original.png"))
