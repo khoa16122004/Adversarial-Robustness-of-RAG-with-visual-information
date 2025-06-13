@@ -61,6 +61,7 @@ def main(args):
         top1_answer = fitness.reader.image_to_text(question, [top1_img])[0]
         
         # check answer
+        recheck = top1_answer
         while recheck not in ["True", "False"]:
             recheck = llm.text_to_text(
                 system_prompt=system_prompt,
