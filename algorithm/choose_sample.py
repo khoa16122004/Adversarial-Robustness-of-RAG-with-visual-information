@@ -70,7 +70,7 @@ def main(args):
             )[0]
         
         if recheck == "True":
-            sample_dir = os.path.join(output_dir, i)
+            sample_dir = os.path.join(output_dir, str(i))
             os.makedirs(sample_dir, exist_ok=True)
             
             with open(os.path.join(sample_dir, "question.txt"), "w") as f:
