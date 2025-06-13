@@ -51,12 +51,13 @@ def main(args):
             system_prompt="You are a helpful assistant for extracting key concepts.",
             prompt=keyword_prompt.format(question=question)
         )[0].strip()
-
+        print("keyword:", keyword_text)
+        
         sim_scores = fitness.retriever(keyword_text, corpus)
         top1_img = corpus[sim_scores.argmax()]
 
         top1_answer = fitness.reader.image_to_text(question, [top1_img])
-
+        print("top1 answer:", top1_answer)
         result = top1_answer
         while result not in ["True", "False"]:
             result = llm.text_to_text(
