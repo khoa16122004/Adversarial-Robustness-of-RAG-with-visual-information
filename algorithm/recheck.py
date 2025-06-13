@@ -48,7 +48,7 @@ def main(args):
         individual = pkl.load(open(individual_path, "rb"))
     
     P_retri_score, P_reader_score, P_adv_imgs = fitness(individual)
-    # print("score: ", history)
+    print("score: ", history)
     # print("rerun score: ", P_retri_score, P_reader_score)
     
     # greedy selection
