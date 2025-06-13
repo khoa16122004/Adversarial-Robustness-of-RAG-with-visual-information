@@ -25,7 +25,7 @@ def main(args):
     system_prompt = (
         "You are an assistant that helps me compare two answers for a QA task. "
         "One answer is the ground truth, and the other is the model's prediction.\n"
-        "You will return "True" if the model answer matches the ground truth, otherwise "False"."
+        "You will return 'True' if the model answer matches the ground truth, otherwise 'False'."
     )
     
     prompt = (
@@ -59,7 +59,8 @@ def main(args):
         
         # answer form top1 documents
         top1_answer = fitness.reader.image_to_text(question, [top1_img])[0]
-        
+        print("Answer: ", top1_answer)
+        print("GT: ", answer)
         # check answer
         recheck = top1_answer
         while recheck not in ["True", "False"]:
