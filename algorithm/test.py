@@ -25,7 +25,7 @@ def main(args):
         lines = [line.strip() for line in f.readlines()]
     
     for i in lines:    
-        question, answer, paths, gt_paths = loader.take_data(sample_id)
+        question, answer, paths, gt_paths = loader.take_data(i)
         corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
         
         # top1 documents
