@@ -8,7 +8,7 @@ sys.path.append('..')
 from utils import DataLoader
 from fitness import MultiScore
 from algorithm import NSGAII
-
+from tqdm import tqdm
 
 
 def main(args):
@@ -24,7 +24,7 @@ def main(args):
     with open(args.sample_id_path) as f:
         lines = [int(line.strip()) for line in f.readlines()]
     
-    for i in lines:    
+    for i in tqdm(lines):    
         question, answer, paths, gt_paths = loader.take_data(i)
         corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
         
