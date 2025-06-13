@@ -48,14 +48,14 @@ def main(args):
         individual = pkl.load(open(individual_path, "rb"))
     
     P_retri_score, P_reader_score, P_adv_imgs = fitness(individual)
-    print("score: ", history)
+    # print("score: ", history)
     # print("rerun score: ", P_retri_score, P_reader_score)
     
     # greedy selection
     filtered = history[history[:, 0] < 1]
     print(filtered)
     if len(filtered) > 0:
-        min_idx = torch.argmin(filtered[:, 1])
+        min_idx = torch.np(filtered[:, 1])
         result = filtered[min_idx]
         print("Score greedy: ", result)
     else:
