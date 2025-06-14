@@ -69,7 +69,7 @@ def main(args):
             img.save(os.path.join(sample_dir, basename))
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
-            json.dump(metadata, f)
+            json.dump(metadata, f, indent=4)
 
         
 
