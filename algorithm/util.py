@@ -109,21 +109,24 @@ class DataLoader:
     
     
 def compute_nlg_metrics(pred, refs):
-    refs = [r.lower() for r in refs]
-    pred = pred.lower()
+    refs = [r.lower().strip() for r in refs]
+    pred = pred.lower().strip()
 
     smoothing = SmoothingFunction().method1
     bleu = sentence_bleu([r.split() for r in refs], pred.split(), smoothing_function=smoothing)
-    meteor = meteor_score(refs, pred)
-    rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
-    rouge_scores = rouge.score(pred, refs[0])
+    meteor = max(meteor_score([ref], pred) for ref in refs)
 
-    bert_P, bert_R, bert_F1 = bert_score.score([pred], [refs[0]], lang="en", verbose=False)
+    rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+    rouge_1 = max(rouge.score(pred, ref)['rouge1'].fmeasure for ref in refs)
+    rouge_l = max(rouge.score(pred, ref)['rougeL'].fmeasure for ref in refs)
+
+    bert_P, bert_R, bert_F1 = bert_score.score([pred] * len(refs), refs, lang="en", verbose=False)
+    bert_f1_max = max(bert_F1).item()
 
     return {
         "BLEU": bleu,
         "METEOR": meteor,
-        "ROUGE-1": rouge_scores["rouge1"].fmeasure,
-        "ROUGE-L": rouge_scores["rougeL"].fmeasure,
-        "BERTScore": bert_F1[0].item()
+        "ROUGE-1": rouge_1,
+        "ROUGE-L": rouge_l,
+        "BERTScore": bert_f1_max
     }
