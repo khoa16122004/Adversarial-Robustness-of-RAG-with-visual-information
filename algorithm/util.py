@@ -114,12 +114,16 @@ def compute_nlg_metrics(pred, refs):
 
     smoothing = SmoothingFunction().method1
     bleu = sentence_bleu([r.split() for r in refs], pred.split(), smoothing_function=smoothing)
-    meteor = max(meteor_score([ref], pred) for ref in refs)
 
+    # METEOR expects single ref at a time, both tokenized
+    meteor = max(meteor_score(r.split(), pred.split()) for r in refs)
+
+    # ROUGE expects raw strings
     rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
     rouge_1 = max(rouge.score(pred, ref)['rouge1'].fmeasure for ref in refs)
     rouge_l = max(rouge.score(pred, ref)['rougeL'].fmeasure for ref in refs)
 
+    # BERTScore can accept list of refs and preds
     bert_P, bert_R, bert_F1 = bert_score.score([pred] * len(refs), refs, lang="en", verbose=False)
     bert_f1_max = max(bert_F1).item()
 
