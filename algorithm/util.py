@@ -112,8 +112,8 @@ def compute_nlg_metrics(pred, refs):
     refs = [r.lower().strip() for r in refs]
     pred = pred.lower().strip()
     
-    print(refs)
-    print(pred)
+    # print(refs)
+    # print(pred)
 
     smoothing = SmoothingFunction().method1
     bleu = sentence_bleu([r.split() for r in refs], pred.split(), smoothing_function=smoothing)
