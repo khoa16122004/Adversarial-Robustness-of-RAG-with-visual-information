@@ -42,8 +42,10 @@ def main():
         for k in args.topks:
             imgs_k = retri_imgs[:k]
             pred_answer = fitness.reader.image_to_text(question, imgs_k)
+            
+            max_retry = 10
             result = ""
-            while result not in ["True", "False"]:
+            for _ in range(max_retry):
                 result = llm.text_to_text(
                     system_prompt=system_prompt,
                     prompt=(
@@ -52,6 +54,10 @@ def main():
                         f"Model Answer: {pred_answer}"
                     )
                 )[0].strip()
+                if result in ["True", "False"]:
+                    break
+            else:
+                result = "True"
 
             nlg_scores = compute_nlg_metrics(pred_answer, answer)
 
