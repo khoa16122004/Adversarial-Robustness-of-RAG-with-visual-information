@@ -11,7 +11,7 @@ from tqdm import tqdm
 from llm_service import LlamaService, GPTService
 
 def main(args):
-    output_dir = "retri_result"
+    output_dir = f"retri_result_{args.model_name}"
     os.makedirs(output_dir, exist_ok=True)
 
     loader = DataLoader(path=args.annotation_path, img_dir=args.dataset_dir)
