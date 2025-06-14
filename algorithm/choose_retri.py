@@ -19,9 +19,9 @@ def main(args):
     llm = LlamaService(model_name="Llama-7b")
     
     system_prompt = (
-        "You are an assistant that extracts key descriptive features from a question to aid in image retrieval."
-        "Return only the keywords, separated by commas."
-        "Remove all stop words and any species names mentioned in the question."
+        "You are an assistant that extracts only the distinctive physical parts or features mentioned in the question to support image retrieval."
+        "Ignore general descriptions, stop words, and species names."
+        "Return only the relevant physical features, separated by commas."
     )
     prompt_template = "Question: {question}"
     
@@ -64,7 +64,7 @@ def main(args):
             "gt_basenames": gt_basenames[:5],
             "topk_basenames": topk_basenames,
         }
-        
+        raise
         
         
         # save
