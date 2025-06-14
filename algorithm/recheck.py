@@ -59,7 +59,7 @@ def main(args):
         print(history)
         imgs = []
         for i in range(len(valid_mask)):
-            imgs.append(valid_mask)        
+            imgs.append(P_adv_imgs[i])        
         # imgs = [P_adv_imgs[min_idx], fitness.original_img]
         imgs.append(fitness.original_img)
         outputs = []
