@@ -28,3 +28,6 @@ class BLIPModel(VisionModel):
             outputs = self.model.text_model(**inputs)
         features = outputs.last_hidden_state[:, 0, :]  # [CLS] token
         return torch.nn.functional.normalize(features, p=2, dim=-1)
+
+
+BLIPModel()
