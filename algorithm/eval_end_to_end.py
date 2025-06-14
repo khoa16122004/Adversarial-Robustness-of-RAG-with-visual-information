@@ -63,6 +63,7 @@ def main():
                 "METEOR": nlg_scores["METEOR"],
                 "ROUGE-1": nlg_scores["ROUGE-1"],
                 "ROUGE-L": nlg_scores["ROUGE-L"],
+                "end_to_end": result,
                 # "BERTScore": nlg_scores["BERTScore"]
             }
 
