@@ -21,7 +21,9 @@ def main(args):
     fitness = MultiScore(reader_name="llava", 
                          retriever_name="clip"
                          )
-
+    
+    # output dir
+    os.makedirs("results", exist_ok=True)
     for id in lines:
         
 
@@ -65,10 +67,12 @@ def main(args):
             output = fitness.reader.image_to_text(question, [img])
             outputs.append(output)
         
-        
-        print("==*10")
-        print("Question: ", question)
-        print("Output: ", outputs)    
+        result_path = os.path.join("results", f"result_{id}.txt")
+        with open(result_path, "w", encoding="utf-8") as f:
+            f.write(f"Question: {question}\n")
+            f.write("Outputs:\n")
+            for i, output in enumerate(outputs):
+                f.write(f"{i+1}. {output}\n")    
 
     
 
@@ -84,6 +88,5 @@ if __name__ == "__main__":
     parser.add_argument("--dataset_dir", type=str, required=True, help="Directory of the dataset images")
     parser.add_argument("--w", type=int, default=312, help="Width to resize images")
     parser.add_argument("--h", type=int, default=312, help="Height to resize images")
-    parser.add_argument("--id", type=int, required=True)
     args = parser.parse_args()
     main(args)
