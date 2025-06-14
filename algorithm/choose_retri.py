@@ -40,14 +40,13 @@ def main(args):
         corpus = []
         for path in paths:
             try:
-                print(os.path.exists(path))
                 image = Image.open(path).convert('RGB').resize((args.w, args.h))
+                print("read successfully")
                 corpus.apend(image)
             except:
                 continue
         
-        if not corpus:
-            continue
+
         
         print(corpus)
         sims = retriever(question, corpus)
