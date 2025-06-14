@@ -19,9 +19,10 @@ def main(args):
     llm = LlamaService(model_name="Llama-7b")
     
     system_prompt = (
-        "You are an assistant that extracts only the distinctive physical parts or features mentioned in the question to support image retrieval."
-        "Ignore general descriptions, stop words, and species names."
-        "Return only the relevant physical features, separated by commas."
+        "You are a helpful assistant. Your task is to extract the specific physical parts or features mentioned in the question "
+        "that are useful for image retrieval. These should be short terms or words like 'tail', 'claws', 'antennae', etc. "
+        "Ignore any species names, stop words, and general descriptions. "
+        "Return only the relevant physical features, not anything else"
     )
     prompt_template = "Question: {question}"
     
