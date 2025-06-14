@@ -3,7 +3,8 @@ from transformers import AutoTokenizer, AutoModelForCausalLM, LlamaForCausalLM, 
 import os
 from openai import OpenAI
 from typing import List, Optional
-
+import dotenv
+dotenv.load_dotenv()
 class QwenService:
     def __init__(self, model_name):
         self.model_name = model_name
