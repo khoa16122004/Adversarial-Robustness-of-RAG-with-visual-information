@@ -17,7 +17,7 @@ def main():
     parser.add_argument("--retriever_name", type=str, default="clip")
     parser.add_argument("--llm_model", type=str, default="Llama-7b")
     parser.add_argument("--topks", type=int, nargs="+", default=[1, 2, 5])
-    parser.add_argument("--`save_dir`", type=str, default="reader_result")
+    parser.add_argument("--save_dir", type=str, default="reader_result")
     args = parser.parse_args()
 
     loader = DataLoader(retri_dir=args.retri_dir)
