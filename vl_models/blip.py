@@ -30,4 +30,4 @@ class BLIPModel(VisionModel):
         return torch.nn.functional.normalize(features, p=2, dim=-1)
 
 
-BLIPModel()
+# BLIPModel()
