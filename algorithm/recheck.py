@@ -24,10 +24,10 @@ def main(args):
     
     # output dir
     os.makedirs("results", exist_ok=True)
-    for id in lines:
+    for id in tqdm(lines):
         
 
-        question, answer, paths, gt_paths = loader.take_data(args.id)
+        question, answer, paths, gt_paths = loader.take_data(id)
         corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
         
         # top1 documents
