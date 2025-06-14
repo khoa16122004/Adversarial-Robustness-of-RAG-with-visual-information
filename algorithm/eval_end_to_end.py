@@ -13,11 +13,11 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--retri_dir", type=str, required=True)
-    parser.add_argument("--model_name", type=str, default="blip")
+    parser.add_argument("--model_name", type=str, default="llava")
     parser.add_argument("--retriever_name", type=str, default="clip")
     parser.add_argument("--llm_model", type=str, default="Llama-7b")
     parser.add_argument("--topks", type=int, nargs="+", default=[1, 2, 5])
-    parser.add_argument("--save_dir", type=str, default="reader_result")
+    parser.add_argument("--`save_dir`", type=str, default="reader_result")
     args = parser.parse_args()
 
     loader = DataLoader(retri_dir=args.retri_dir)
@@ -33,8 +33,8 @@ def main():
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
 
         fitness = MultiScore(
-            reader=args.model_name,
-            retriever=args.retriever_name
+            reader_name=args.model_name,
+            retriever_name=args.retriever_name
         )
 
         answers_by_topk = {}
