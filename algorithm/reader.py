@@ -14,7 +14,7 @@ class Reader(torch.nn.Module):
             from lvlm_models.llava_ import LLava
             
             # simple template
-            self.template = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways. <image>"
+            self.template = "You will be given a question and somes images to help you answer the question. Please answer the question in the short ways."
             self.model = LLava(
                 pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
@@ -28,7 +28,7 @@ class Reader(torch.nn.Module):
         
         # input
         intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
-        prompt = f"{intruction}\n question {qs}\n images <image>"
+        prompt = f"{intruction}\n question {qs}\n images: " +  + "<image>" * len(img_files)
         
         outputs = self.model(prompt, img_files)[0]
         
