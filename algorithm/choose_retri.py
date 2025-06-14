@@ -40,7 +40,6 @@ def main(args):
         corpus = []
         for path in paths:
             try:
-                print(path)
                 image = Image.open(path).convert('RGB').resize((args.w, args.h))
                 corpus.apend(image)
             except:
