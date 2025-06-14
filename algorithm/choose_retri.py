@@ -8,7 +8,7 @@ sys.path.append('..')
 from utils import DataLoader
 from retriever import Retriever
 from tqdm import tqdm
-from llm_service import LlamaService
+from llm_service import LlamaService, GPTService
 
 def main(args):
     output_dir = "retri_result"
@@ -16,7 +16,7 @@ def main(args):
 
     loader = DataLoader(path=args.annotation_path, img_dir=args.dataset_dir)
     retriever = Retriever(model_name=args.model_name)
-    llm = LlamaService(model_name="Llama-7b")
+    llm = GPTService(model_name="gpt-4o")
     
     system_prompt = (
         "You are a helpful assistant. Your task is to extract the specific physical parts or features mentioned in the question "
