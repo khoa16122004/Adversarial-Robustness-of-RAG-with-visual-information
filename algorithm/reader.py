@@ -28,7 +28,7 @@ class Reader(torch.nn.Module):
         
         # input
         intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
-        prompt = f"{intruction}\n question {qs}\n images: " +  + "<image>" * len(img_files)
+        prompt = f"{intruction}\n question {qs}\n images: " +  "<image>" * len(img_files)
         
         outputs = self.model(prompt, img_files)[0]
         
