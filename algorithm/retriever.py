@@ -10,6 +10,9 @@ class Retriever(torch.nn.Module):
         if model_name == "clip":
             from vl_models import CLIPModel
             self.model = CLIPModel()
+        elif model_name == "blip":
+            from vl_models import BLIPModel
+            self.model = BLIPModel()
             
     @torch.no_grad()
     def forward(self, qs, img_files):
