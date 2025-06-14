@@ -34,7 +34,7 @@ def main():
         retriever_name=args.retriever_name
     )
 
-    for i in tqdm(range(len(loader))):
+    for i in tqdm(range(313, len(loader))):
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
 
         answers_by_topk = {}
@@ -52,9 +52,10 @@ def main():
                         f"Model Answer: {pred_answer}"
                     )
                 )[0].strip()
-
-            nlg_scores = compute_nlg_metrics(pred_answer, answer)
-
+            try:
+                nlg_scores = compute_nlg_metrics(pred_answer, answer)
+            except:
+                continue
             answers_by_topk[f"top_{k}"] = {
                 "model_answer": pred_answer,
                 "gt_answers": answer,
