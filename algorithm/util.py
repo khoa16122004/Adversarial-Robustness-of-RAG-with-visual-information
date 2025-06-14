@@ -119,7 +119,7 @@ def compute_nlg_metrics(pred, refs):
     bleu = sentence_bleu([r.split() for r in refs], pred.split(), smoothing_function=smoothing)
 
     # METEOR expects single ref at a time, both tokenized
-    meteor = max(meteor_score(r.split(), pred.split()) for r in refs)
+    meteor = max(meteor_score([ref.split()], pred.split()) for ref in refs)
 
     # ROUGE expects raw strings
     rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
