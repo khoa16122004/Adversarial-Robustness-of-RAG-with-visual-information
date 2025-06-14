@@ -21,8 +21,8 @@ def main(args):
     system_prompt = (
         "You are a helpful assistant. Your task is to extract the specific physical parts or features mentioned in the question "
         "that are useful for image retrieval. These should be short terms or words like 'tail', 'claws', 'antennae', etc. "
-        "Ignore any species names, stop words, and general descriptions. "
-        "Return only the relevant physical features, not anything else."
+        "Ignore any species names, stop words, general descriptions or the words like colors"
+        "Return only the most usefull relevant physical feature, not anything else."
     )
     prompt_template = "Question: {question}"
     
