@@ -26,6 +26,7 @@ def main(args):
     os.makedirs("results", exist_ok=True)
     for id in tqdm(lines):
         
+        result_path = os.path.join("results", f"result_{id}.txt")
 
         question, answer, paths, gt_paths = loader.take_data(id)
         corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
@@ -59,6 +60,7 @@ def main(args):
         print(history)
         imgs = []
         for i in range(len(valid_mask)):
+            P_adv_imgs[i].save(os.path.join(result_path, f"{i}.png"))
             imgs.append(P_adv_imgs[i])        
         # imgs = [P_adv_imgs[min_idx], fitness.original_img]
         imgs.append(fitness.original_img)
@@ -67,7 +69,6 @@ def main(args):
             output = fitness.reader.image_to_text(question, [img])
             outputs.append(output)
         
-        result_path = os.path.join("results", f"result_{id}.txt")
         with open(result_path, "w", encoding="utf-8") as f:
             f.write(f"Question: {question}\n")
             f.write("Outputs:\n")
