@@ -38,17 +38,22 @@ def main(args):
         
         # sims retri
         corpus = []
-        for path in paths:
+        basename_corpus = []
+        for i, path in enumerate(paths):
             try:
                 image = Image.open(path).convert('RGB').resize((args.w, args.h))
+                basename_corpus.append(path_basenames[i])
                 corpus.append(image)
             except:
                 continue
         
 
         sims = retriever(question, corpus)
+        print("Len sims", len(sims))
         topk_indices = torch.argsort(sims, descending=True)[:5]
-        topk_basenames = [path_basenames[i] for i in topk_indices]
+        print(topk_indices)
+        topk_basenames = [basename_corpus[i] for i in topk_indices]
+        print(topk_basenames)
         topk_imgs = [corpus[i] for i in topk_indices]
              
         # path
