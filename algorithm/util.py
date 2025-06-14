@@ -4,6 +4,10 @@ import numpy as np
 import os
 from PIL import Image
 import json
+from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+from nltk.translate.meteor_score import meteor_score
+from rouge_score import rouge_scorer
+import bert_score
 
 def dominate(a, b):
     if a[0] < b[0] and a[1] < b[1]:
@@ -102,3 +106,24 @@ class DataLoader:
                                    
     def __len__(self):
         return len(os.listdir(self.retri_dir))
+    
+    
+def compute_nlg_metrics(pred, refs):
+    refs = [r.lower() for r in refs]
+    pred = pred.lower()
+
+    smoothing = SmoothingFunction().method1
+    bleu = sentence_bleu([r.split() for r in refs], pred.split(), smoothing_function=smoothing)
+    meteor = meteor_score(refs, pred)
+    rouge = rouge_scorer.RougeScorer(['rouge1', 'rougeL'], use_stemmer=True)
+    rouge_scores = rouge.score(pred, refs[0])
+
+    bert_P, bert_R, bert_F1 = bert_score.score([pred], [refs[0]], lang="en", verbose=False)
+
+    return {
+        "BLEU": bleu,
+        "METEOR": meteor,
+        "ROUGE-1": rouge_scores["rouge1"].fmeasure,
+        "ROUGE-L": rouge_scores["rougeL"].fmeasure,
+        "BERTScore": bert_F1[0].item()
+    }
