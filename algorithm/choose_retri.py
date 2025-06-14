@@ -44,6 +44,8 @@ def main(args):
                 corpus.apend(image)
             except:
                 continue
+            
+        print(corpus)
         sims = retriever(question, corpus)
         topk_indices = torch.argsort(sims, descending=True)[:5]
         topk_basenames = [path_basenames[i] for i in topk_indices]
