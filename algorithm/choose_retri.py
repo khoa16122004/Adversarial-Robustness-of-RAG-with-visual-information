@@ -41,14 +41,11 @@ def main(args):
         for path in paths:
             try:
                 image = Image.open(path).convert('RGB').resize((args.w, args.h))
-                print("read successfully")
-                corpus.apend(image)
+                corpus.append(image)
             except:
                 continue
         
 
-        
-        print(corpus)
         sims = retriever(question, corpus)
         topk_indices = torch.argsort(sims, descending=True)[:5]
         topk_basenames = [path_basenames[i] for i in topk_indices]
