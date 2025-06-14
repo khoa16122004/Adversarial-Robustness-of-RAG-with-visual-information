@@ -36,7 +36,8 @@ def main():
             reader_name=args.model_name,
             retriever_name=args.retriever_name
         )
-
+        print("Answer: ", answer)
+        print(type(answer))
         answers_by_topk = {}
 
         for k in args.topks:
