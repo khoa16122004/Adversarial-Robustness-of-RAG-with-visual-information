@@ -26,7 +26,7 @@ def main():
     system_prompt = (
         "You are an assistant that helps compare two answers for a QA task. "
         "One answer is the ground truth, and the other is the model's prediction.\n"
-        "Return 'True' if the model answer matches one of the ground truth answers, otherwise return 'False'."
+        "JUST ONLY Return 'True' if the model answer matches one of the ground truth answers, otherwise return 'False'."
     )
     
     fitness = MultiScore(
@@ -42,10 +42,8 @@ def main():
         for k in args.topks:
             imgs_k = retri_imgs[:k]
             pred_answer = fitness.reader.image_to_text(question, imgs_k)
-            
-            max_retry = 10
             result = ""
-            for _ in range(max_retry):
+            while result not in ["True", "False"]:
                 result = llm.text_to_text(
                     system_prompt=system_prompt,
                     prompt=(
@@ -54,10 +52,6 @@ def main():
                         f"Model Answer: {pred_answer}"
                     )
                 )[0].strip()
-                if result in ["True", "False"]:
-                    break
-            else:
-                result = "True"
 
             nlg_scores = compute_nlg_metrics(pred_answer, answer)
 
