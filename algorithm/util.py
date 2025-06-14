@@ -127,13 +127,13 @@ def compute_nlg_metrics(pred, refs):
     rouge_l = max(rouge.score(pred, ref)['rougeL'].fmeasure for ref in refs)
 
     # BERTScore can accept list of refs and preds
-    bert_P, bert_R, bert_F1 = bert_score.score([pred] * len(refs), refs, lang="en", verbose=False)
-    bert_f1_max = max(bert_F1).item()
+    # bert_P, bert_R, bert_F1 = bert_score.score([pred] * len(refs), refs, lang="en", verbose=False)
+    # bert_f1_max = max(bert_F1).item()
 
     return {
         "BLEU": bleu,
         "METEOR": meteor,
         "ROUGE-1": rouge_1,
         "ROUGE-L": rouge_l,
-        "BERTScore": bert_f1_max
+        # "BERTScore": bert_f1_max
     }

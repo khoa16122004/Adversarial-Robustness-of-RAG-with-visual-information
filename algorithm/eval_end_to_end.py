@@ -64,7 +64,7 @@ def main():
                 "METEOR": nlg_scores["METEOR"],
                 "ROUGE-1": nlg_scores["ROUGE-1"],
                 "ROUGE-L": nlg_scores["ROUGE-L"],
-                "BERTScore": nlg_scores["BERTScore"]
+                # "BERTScore": nlg_scores["BERTScore"]
             }
 
         save_path = Path(args.save_dir) / args.llm_model / args.retriever_name / str(i)
