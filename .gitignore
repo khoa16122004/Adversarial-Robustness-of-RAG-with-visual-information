@@ -196,5 +196,6 @@ cython_debug/
 /data/*
 /output/*
 # split_corpus
-algorithm/clip_llava_0.1
+algorithm/llavanext_0.1
 algorithm/jerry_pick
+algorithm/*gif
