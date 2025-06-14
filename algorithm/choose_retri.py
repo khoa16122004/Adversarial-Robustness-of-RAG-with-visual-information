@@ -49,12 +49,9 @@ def main(args):
         
 
         sims = retriever(question, corpus).flatten()
-        print("Len sims", sims.shape)
         topk_values, topk_indices = torch.topk(sims, 5)
 
-        print(topk_indices)
         topk_basenames = [basename_corpus[i] for i in topk_indices]
-        print(topk_basenames)
         topk_imgs = [corpus[i] for i in topk_indices]
              
         # path
@@ -65,7 +62,6 @@ def main(args):
             "gt_basenames": gt_basenames[:5],
             "topk_basenames": topk_basenames,
         }
-        raise
         
         
         # save
