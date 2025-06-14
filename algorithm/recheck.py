@@ -41,7 +41,7 @@ def main(args):
         fitness.init_data(question, top1_img, top1_answer)
             
         # data_runed
-        dir = f"logs/clip_llava_0.1/{args.id}"
+        dir = f"logs/clip_llava_0.1/{id}"
         images_dir = os.path.join(dir, "images")
         scores_path = os.path.join(dir, "scores.pkl")
         individual_path = os.path.join(dir, "individuals.pkl")
