@@ -35,7 +35,7 @@ def main(args):
         keyword_query = llm.text_to_text(
             system_prompt=system_prompt,
             prompt=prompt_template.format(question=question),
-        )[0].strip()
+        ).strip()
         
         # sims retri
         corpus = []
