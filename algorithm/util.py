@@ -101,4 +101,4 @@ class DataLoader:
         return question, answer, query, gt_basenames, retri_basenames, retri_imgs
                                    
     def __len__(self):
-        return len(os.listdir(self.data))
+        return len(os.listdir(self.retri_dir))
