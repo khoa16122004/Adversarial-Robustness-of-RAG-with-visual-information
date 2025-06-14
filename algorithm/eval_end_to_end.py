@@ -28,16 +28,15 @@ def main():
         "One answer is the ground truth, and the other is the model's prediction.\n"
         "Return 'True' if the model answer matches one of the ground truth answers, otherwise return 'False'."
     )
+    
+    fitness = MultiScore(
+        reader_name=args.model_name,
+        retriever_name=args.retriever_name
+    )
 
     for i in tqdm(range(len(loader))):
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
 
-        fitness = MultiScore(
-            reader_name=args.model_name,
-            retriever_name=args.retriever_name
-        )
-        # print("Answer: ", answer)
-        # print(type(answer))
         answers_by_topk = {}
 
         for k in args.topks:
