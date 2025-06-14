@@ -49,8 +49,8 @@ def main(args):
         
 
         sims = retriever(question, corpus)
-        print("Len sims", len(sims))
-        topk_indices = torch.argsort(sims, descending=True)[:5]
+        print("Len sims", sims.shape)
+        topk_indices = # take top_5 index
         print(topk_indices)
         topk_basenames = [basename_corpus[i] for i in topk_indices]
         print(topk_basenames)
