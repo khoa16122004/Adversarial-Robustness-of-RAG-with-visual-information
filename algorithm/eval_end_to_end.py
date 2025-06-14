@@ -42,7 +42,7 @@ def main():
         for k in args.topks:
             imgs_k = retri_imgs[:k]
             pred_answer = fitness.reader.image_to_text(question, imgs_k)
-
+            print(pred_answer)
             result = ""
             while result not in ["True", "False"]:
                 result = llm.text_to_text(
@@ -59,7 +59,6 @@ def main():
             answers_by_topk[f"top_{k}"] = {
                 "model_answer": pred_answer,
                 "gt_answers": answer,
-                "match": result,
                 "BLEU": nlg_scores["BLEU"],
                 "METEOR": nlg_scores["METEOR"],
                 "ROUGE-1": nlg_scores["ROUGE-1"],
