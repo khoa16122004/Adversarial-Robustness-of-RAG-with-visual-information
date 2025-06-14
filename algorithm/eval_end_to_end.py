@@ -42,7 +42,6 @@ def main():
         for k in args.topks:
             imgs_k = retri_imgs[:k]
             pred_answer = fitness.reader.image_to_text(question, imgs_k)
-            clips = fitness.clipscore(query, imgs_k)
 
             result = ""
             while result not in ["True", "False"]:
@@ -59,7 +58,6 @@ def main():
 
             answers_by_topk[f"top_{k}"] = {
                 "model_answer": pred_answer,
-                "clipscore": clips,
                 "match": result,
                 "BLEU": nlg_scores["BLEU"],
                 "METEOR": nlg_scores["METEOR"],
