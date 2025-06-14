@@ -42,7 +42,6 @@ def main():
         for k in args.topks:
             imgs_k = retri_imgs[:k]
             pred_answer = fitness.reader.image_to_text(question, imgs_k)
-            print(pred_answer)
             result = ""
             while result not in ["True", "False"]:
                 result = llm.text_to_text(

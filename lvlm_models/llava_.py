@@ -54,7 +54,7 @@ class LLava:
         else:
             image_tensors = None
             image_sizes = None
-        
+        print("Len tensor: ",len(image_tensors))
         with torch.inference_mode():
             cont = self.model.generate(
             input_ids,
