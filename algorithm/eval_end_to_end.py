@@ -58,6 +58,7 @@ def main():
 
             answers_by_topk[f"top_{k}"] = {
                 "model_answer": pred_answer,
+                "gt_answers": answer,
                 "match": result,
                 "BLEU": nlg_scores["BLEU"],
                 "METEOR": nlg_scores["METEOR"],
