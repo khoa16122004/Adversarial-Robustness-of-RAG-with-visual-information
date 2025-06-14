@@ -1,6 +1,9 @@
 import matplotlib.animation as animation
 import matplotlib.pyplot as plt
 import numpy as np
+import os
+from PIL import Image
+import json
 
 def dominate(a, b):
     if a[0] < b[0] and a[1] < b[1]:
@@ -74,3 +77,28 @@ def visualize_process(final_history, objective_labels=["L_RSR", "L_GPR"], interv
     ani = animation.FuncAnimation(fig, update, frames=num_generations, interval=interval, blit=True)
     plt.close(fig)
     return ani
+
+
+class DataLoader:    
+    def __init__(self, retri_dir):
+        self.retri_dir = retri_dir
+        
+
+    def take_data(self, sample_id):
+        sample_dir = os.path.join(self.retri_dir, str(sample_id))
+        metadata_path = os.path.join(sample_dir, "metadata.json")
+        with open(metadata_path, "r") as f:
+            data = json.load(f)
+            
+        question = data["question"]
+        answer = data["answer"]
+        query = data["keyword"]
+        gt_basenames = data["gt_basenames"]
+        retri_basenames = data["topk_basenames"]
+        
+        retri_imgs = [Image.open(os.path.join(sample_dir, basename)) for basename in retri_basenames]
+        
+        return question, answer, query, gt_basenames, retri_basenames, retri_imgs
+                                   
+    def __len__(self):
+        return len(os.listdir(self.data))
