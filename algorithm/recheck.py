@@ -35,8 +35,8 @@ def main(args):
         # init fitness data
         top_adv_imgs = [Image.open(os.path.join(result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")) for k in range(1, args.n_k + 1)]
 
-        print(fitness.retriever(question, top_adv_imgs))
-        print(fitness.retriever(question, retri_imgs))
+        print(fitness.retriever(query, top_adv_imgs))
+        print(fitness.retriever(query, retri_imgs))
         break
         
 
