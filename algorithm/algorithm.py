@@ -175,7 +175,7 @@ class NSGAII:
 
         self.history = []
 
-        for iter in tqdm(**range(self.max_iter)):
+        for iter in tqdm(range(self.max_iter)):
             
             # print("Population shape: ", P.shape)
             # print("Population retri score shape: ", P_retri_score.shape)
