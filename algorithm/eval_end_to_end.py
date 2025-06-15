@@ -34,7 +34,7 @@ def main():
         retriever_name=args.retriever_name
     )
 
-    for i in tqdm(range(313, len(loader))):
+    for i in tqdm(range(len(loader))):
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
 
         answers_by_topk = {}

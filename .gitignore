@@ -201,4 +201,5 @@ algorithm/jerry_pick
 algorithm/*gif
 reader_result
 attack_result
+attack_result_debug
 retri_result
