@@ -54,7 +54,6 @@ def main(args):
         print(topk_values)
         topk_basenames = [basename_corpus[i] for i in topk_indices]
         topk_imgs = [corpus[i] for i in topk_indices]
-        raise
         # path
         metadata = {
             "question": question,
@@ -73,6 +72,9 @@ def main(args):
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
             json.dump(metadata, f, indent=4)
+        
+        raise
+
 
         
 
