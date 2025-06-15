@@ -35,7 +35,9 @@ def main(args):
         
         # init fitness data
         top_adv_imgs = [Image.open(os.path.join(result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")).convert("RGB") for k in range(1, args.n_k)]
+        print("top_adv_imgs: ", top_adv_imgs)
         top_original_imgs = retri_imgs[:args.n_k]
+        print("top_original_imgs: ", top_original_imgs)
         fitness.init_data(query, 
                           question, 
                           top_adv_imgs, # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}

@@ -26,7 +26,7 @@ class MultiScore:
         # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
         
         self.original_img = deepcopy(top_orginal_imgs[-1]) # topk original img
-        self.top1_img = deepcopy(top_adv_imgs[0])
+        self.top1_img = deepcopy(top_orginal_imgs[0])
         self.top_adv_imgs = top_adv_imgs
         self.n_k = n_k
         self.original_img_tensor = transforms.ToTensor()(self.original_img).cuda()
