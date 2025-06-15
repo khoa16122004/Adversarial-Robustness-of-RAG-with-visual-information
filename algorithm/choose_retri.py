@@ -50,6 +50,7 @@ def main(args):
         
 
         sims = retriever(keyword_query, corpus).flatten()
+        print(sims)
         topk_values, topk_indices = torch.topk(sims, 5)
 
         topk_basenames = [basename_corpus[i] for i in topk_indices]
@@ -73,6 +74,7 @@ def main(args):
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
             json.dump(metadata, f, indent=4)
+        break
 
         
 
