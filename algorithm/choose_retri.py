@@ -9,10 +9,9 @@ from utils import DataLoader
 from retriever import Retriever
 from tqdm import tqdm
 from llm_service import LlamaService, GPTService
-import shutil
+
 def main(args):
-    # output_dir = f"retri_result_{args.model_name}"
-    output_dir = f"retri_result_debug"
+    output_dir = f"retri_result_{args.model_name}"
     os.makedirs(output_dir, exist_ok=True)
 
     loader = DataLoader(path=args.annotation_path, img_dir=args.dataset_dir)
@@ -37,29 +36,25 @@ def main(args):
             system_prompt=system_prompt,
             prompt=prompt_template.format(question=question),
         ).strip()
-        print("keyword_query", keyword_query)
         
         # sims retri
         corpus = []
         basename_corpus = []
-        paths_corpus = []
         for i, path in enumerate(paths):
             try:
-                image = Image.open(path).resize((args.w, args.h))
-                
+                image = Image.open(path).convert('RGB').resize((args.w, args.h))
                 basename_corpus.append(path_basenames[i])
-                paths_corpus.append(path)
                 corpus.append(image)
             except:
                 continue
         
 
         sims = retriever(keyword_query, corpus).flatten()
-        print(sims)
         topk_values, topk_indices = torch.topk(sims, 5)
+
         topk_basenames = [basename_corpus[i] for i in topk_indices]
         topk_imgs = [corpus[i] for i in topk_indices]
-        topk_paths = [paths_corpus[i] for i in topk_indices]
+             
         # path
         metadata = {
             "question": question,
@@ -73,16 +68,11 @@ def main(args):
         # save
         sample_dir = os.path.join(output_dir, str(sample_id))
         os.makedirs(sample_dir, exist_ok=True)
-        for basename, path in zip(topk_basenames, topk_paths):
-            save_path = os.path.join(sample_dir, basename)
-            shutil.copyfile(path, save_path)
-
+        for img, basename in zip(topk_imgs, topk_basenames):
+            img.save(os.path.join(sample_dir, basename))
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
             json.dump(metadata, f, indent=4)
-        print("topk_basenames", topk_basenames)
-        raise
-
 
         
 
