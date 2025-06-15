@@ -50,9 +50,8 @@ def main(args):
         
 
         sims = retriever(keyword_query, corpus).flatten()
-        print(sims)
         topk_values, topk_indices = torch.topk(sims, 5)
-
+        print(topk_values)
         topk_basenames = [basename_corpus[i] for i in topk_indices]
         topk_imgs = [corpus[i] for i in topk_indices]
              
