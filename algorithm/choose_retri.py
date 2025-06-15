@@ -75,7 +75,7 @@ def main(args):
         
         raise
 
-
+# tensor([0.3416, 0.3347, 0.3318, 0.3301, 0.3289], from choose
         
 
 if __name__ == "__main__":
