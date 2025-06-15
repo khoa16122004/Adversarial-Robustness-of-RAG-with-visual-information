@@ -42,7 +42,7 @@ def main(args):
         basename_corpus = []
         for i, path in enumerate(paths):
             try:
-                image = Image.open(path).convert('RGB').resize((args.w, args.h))
+                image = Image.open(path).resize((args.w, args.h))
                 basename_corpus.append(path_basenames[i])
                 corpus.append(image)
             except:
