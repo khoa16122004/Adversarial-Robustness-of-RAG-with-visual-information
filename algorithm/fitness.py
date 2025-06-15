@@ -18,13 +18,14 @@ class MultiScore:
         self.retriever_name = retriever_name
         self.reader_name = reader_name
     
-    def init_data(self, question, original_img, answer):
+    def init_data(self, query, question, original_img, answer):
         self.original_img = original_img
         self.original_img_tensor = transforms.ToTensor()(original_img).cuda()
-        self.retri_clean_reuslt = self.retriever(question, [original_img])
+        self.retri_clean_reuslt = self.retriever(query, [original_img])
         self.reader_clean_result = self.reader(question, [original_img], answer)
         self.answer = answer
         self.question = question
+        self.query = query
         
     
     def __call__(self, pertubations):  # pertubations: tensor
@@ -32,7 +33,7 @@ class MultiScore:
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
 
-        retrieval_result = self.retriever(self.question, adv_imgs)
+        retrieval_result = self.retriever(self.query, adv_imgs)
         reader_result = self.reader(self.question, adv_imgs, self.answer)
 
         retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()

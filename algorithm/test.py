@@ -37,8 +37,14 @@ def main(args):
             golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
         original_image = retri_imgs[args.n_k]    
         
+        print(f"Question: {question}")
+        print(f"Answer: {answer}")
+        print(f"Query: {query}")
+        print(f"Gold answer: {golder_answer}")
+        
+        
         # init fitness data
-        fitness.init_data(question, original_image, golder_answer)
+        fitness.init_data(query, question, original_image, golder_answer)
         
         # algorithm
         algorithm = NSGAII(
