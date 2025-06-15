@@ -3,78 +3,64 @@ import sys
 import torch
 from PIL import Image
 import argparse
-import pickle as pkl
+
 sys.path.append('..')
-from utils import DataLoader
+from util import DataLoader
 from fitness import MultiScore
 from algorithm import NSGAII
 from tqdm import tqdm
-import numpy as np
+import json
+
 
 def main(args):
-    loader = DataLoader(path=args.annotation_path,
-                        img_dir=args.dataset_dir)
-    with open("run.txt", "r") as f:
-        lines = [int(line.strip()) for line in f.readlines()]
+    loader = DataLoader(retri_dir=args.retri_dir)
+
 
     # fitness
-    fitness = MultiScore(reader_name="llava", 
-                         retriever_name="clip"
+    fitness = MultiScore(reader_name=args.reader_name, 
+                         retriever_name=args.retriever_name
                          )
     
-    # output dir
-    os.makedirs("results", exist_ok=True)
-    for id in tqdm(lines):
-        
-
-        question, answer, paths, gt_paths = loader.take_data(id)
-        corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
-        
-        # top1 documents
-        sim_scores = fitness.retriever(question, corpus)
-        top1_img = corpus[sim_scores.argmax()]
-        
-        # answer form top1 documents
-        top1_answer = fitness.reader.image_to_text(question, [top1_img])
-        
-        # init fitness data
-        fitness.init_data(question, top1_img, top1_answer)
-            
-        # data_runed
-        dir = f"logs/clip_llava_0.1/{id}"
-        images_dir = os.path.join(dir, "images")
-        scores_path = os.path.join(dir, "scores.pkl")
-        individual_path = os.path.join(dir, "individuals.pkl")
-        # read
-        with open(scores_path, 'rb') as f:
-            history = pkl.load(open(scores_path, "rb"))[-1]
-        
-        with open(individual_path, 'rb') as f:
-            individual = pkl.load(open(individual_path, "rb"))
-        
-        
-        P_retri_score, P_reader_score, P_adv_imgs = fitness(individual)
-        valid_mask = (P_retri_score < 1) & (P_reader_score < 1)
-        imgs = []
-        for i in range(len(valid_mask)):
-            P_adv_imgs[i].save(os.path.join('results', f"{i}.png"))
-            imgs.append(P_adv_imgs[i])        
-        imgs.append(fitness.original_img)
-        outputs = []
-        for i, img in enumerate(imgs):
-            
-            output = fitness.reader.image_to_text(question, [img])
-            outputs.append(output)
-        
-        result_path = os.path.join("results", f"result_{id}.txt")
-        with open(result_path, "w", encoding="utf-8") as f:
-            f.write(f"Question: {question}\n")
-            f.write("Outputs:\n")
-            for i, output in enumerate(outputs):
-                f.write(f"{i+1}. {output}\n")    
+    result_dir = f"attack_result_debug"
 
     
+    for i in range(len(loader)):    
+        # take data
+        question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
+        json_path = os.path.join(args.reader_dir, str(i), "answers.json")
+        with open(json_path, "r") as f:
+            data = json.load(f)
+            golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
+        
+        # init fitness data
+        top_adv_imgs = [Image.open(os.path.join(result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")) for k in range(1, args.n_k)]
+        print("top_adv_imgs: ", top_adv_imgs)
+        top_original_imgs = retri_imgs[:args.n_k]
+        print("top_original_imgs: ", top_original_imgs)
+        fitness.init_data(query, 
+                          question, 
+                          top_adv_imgs, # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}
+                          top_original_imgs,  # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
+                          golder_answer,
+                          args.n_k)
+        
+        # algorithm
+        algorithm = NSGAII(
+            population_size=args.pop_size,
+            mutation_rate=args.mutation_rate,
+            F=args.F,
+            w=args.w,
+            h=args.h,
+            max_iter=args.max_iter,
+            fitness=fitness,
+            std=args.std,
+            sample_id=str(i),
+            log_dir=result_dir,
+            n_k=args.n_k
+        )
 
+        algorithm.solve()
+        break
         
 
 
@@ -82,10 +68,10 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("--annotation_path", type=str, required=True, help="Path to annotation file (json or txt)")
-    parser.add_argument("--dataset_dir", type=str, required=True, help="Directory of the dataset images")
-    parser.add_argument("--w", type=int, default=312, help="Width to resize images")
-    parser.add_argument("--h", type=int, default=312, help="Height to resize images")
+    parser.add_argument("--reader_dir", type=str, required=True)
+    parser.add_argument("--retri_dir", type=str, required=True)
+    parser.add_argument("--reader_name", type=str, default="llava")
+    parser.add_argument("--retriever_name", type=str, default="clip")
+    parser.add_argument("--n_k", type=int, default=1, help="Number of attack")
     args = parser.parse_args()
     main(args)
