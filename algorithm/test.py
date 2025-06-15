@@ -61,7 +61,7 @@ def main(args):
         )
 
         algorithm.solve()
-        # break
+        break
         
 
 
