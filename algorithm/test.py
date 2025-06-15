@@ -28,7 +28,7 @@ def main(args):
     with open(args.sample_id_path) as f:
         lines = [int(line.strip()) for line in f.readlines()]
     
-    for i in tqdm(lines):    
+    for i in range(len(loader)):    
         # take data
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
         json_path = os.path.join(args.retri_dir, str(i), "answer.json")
