@@ -97,7 +97,7 @@ class DataLoader:
         gt_basenames = data["gt_basenames"]
         retri_basenames = data["topk_basenames"]
         
-        retri_imgs = [Image.open(os.path.join(sample_dir, basename)).convert("RGB") for basename in retri_basenames]
+        retri_imgs = [Image.open(os.path.join(sample_dir, basename)) for basename in retri_basenames]
         
         return question, answer, query, gt_basenames, retri_basenames, retri_imgs
                                    
