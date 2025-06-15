@@ -50,5 +50,6 @@ if __name__ == "__main__":
     parser.add_argument("--reader_name", type=str, default="llava")
     parser.add_argument("--retriever_name", type=str, default="clip")
     parser.add_argument("--n_k", type=int, default=1, help="Number of attack")
+    parser.add_argument("--std", type=float, default=0.1, help="Number of attack")
     args = parser.parse_args()
     main(args)
