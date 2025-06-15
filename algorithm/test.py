@@ -40,7 +40,8 @@ def main(args):
                           question, 
                           top_adv_imgs, # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}
                           top_original_imgs,  # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
-                          golder_answer)
+                          golder_answer,
+                          args.n_k)
         
         # algorithm
         algorithm = NSGAII(
