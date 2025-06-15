@@ -9,7 +9,7 @@ from utils import DataLoader
 from retriever import Retriever
 from tqdm import tqdm
 from llm_service import LlamaService, GPTService
-
+import shutil
 def main(args):
     # output_dir = f"retri_result_{args.model_name}"
     output_dir = f"retri_result_debug"
@@ -45,6 +45,7 @@ def main(args):
         for i, path in enumerate(paths):
             try:
                 image = Image.open(path).resize((args.w, args.h))
+                
                 basename_corpus.append(path_basenames[i])
                 corpus.append(image)
             except:
@@ -69,16 +70,18 @@ def main(args):
         # save
         sample_dir = os.path.join(output_dir, str(sample_id))
         os.makedirs(sample_dir, exist_ok=True)
-        for img, basename in zip(topk_imgs, topk_basenames):
-            img.save(os.path.join(sample_dir, basename))
+        for basename in topk_basenames:
+            original_path = os.path.join(args.dataset_dir, basename)
+            save_path = os.path.join(sample_dir, basename)
+            shutil.copyfile(original_path, save_path)
+
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
             json.dump(metadata, f, indent=4)
         print("topk_basenames", topk_basenames)
         raise
 
-# tensor([0.3416, 0.3347, 0.3318, 0.3301, 0.3289], device='cuda:0', dtype=torch.float16)
-#topk_basenames ['582aa998-1f3c-4ea9-915c-b483d4f5afab.jpg', 'ac5fa8b9-05dd-4175-9dc6-dfbc23b39e78.jpg', '61703a7a-a43a-4dad-bcdd-f1f483e6a109.jpg', '12e3e429-c168-4f51-991e-b7e6ee10974d.jpg', '447b62d2-04bd-422a-bc4c-91fa60bb00ca.jpg']
+
         
 
 if __name__ == "__main__":

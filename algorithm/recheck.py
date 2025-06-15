@@ -27,7 +27,7 @@ def main(args):
     for i in range(len(loader)):    
         # take data
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
-    
+        print("query: ", query)
         print(fitness.retriever(query, retri_imgs))
         break
         
