@@ -5,38 +5,40 @@ from PIL import Image
 import argparse
 
 sys.path.append('..')
-from utils import DataLoader
+from util import DataLoader
 from fitness import MultiScore
 from algorithm import NSGAII
 from tqdm import tqdm
+import json
 
 
 def main(args):
-    loader = DataLoader(path=args.annotation_path,
-                        img_dir=args.dataset_dir)
+    loader = DataLoader(retri_dir=args.retri_dir)
 
 
     # fitness
-    fitness = MultiScore(reader_name="llava", 
-                         retriever_name="clip"
+    fitness = MultiScore(reader_name=args.reader_name, 
+                         retriever_name=args.retriever_name
                          )
+    
+    # result_dir
+    result_dir = f"attack_result"
+    os.makedirs(result_dir, exist_ok=True)
 
     with open(args.sample_id_path) as f:
         lines = [int(line.strip()) for line in f.readlines()]
     
     for i in tqdm(lines):    
-        question, answer, paths, gt_paths = loader.take_data(i)
-        corpus = [Image.open(path).convert('RGB').resize((args.w, args.h)) for path in paths]
-        
-        # top1 documents
-        sim_scores = fitness.retriever(question, corpus)
-        top1_img = corpus[sim_scores.argmax()]
-        
-        # answer form top1 documents
-        top1_answer = fitness.reader.image_to_text(question, [top1_img])
+        # take data
+        question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
+        json_path = os.path.join(args.retri_dir, str(i), "answer.json")
+        with open(json_path, "r") as f:
+            data = json.load(f)
+            golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
+        original_image = retri_imgs[args.n_k]    
         
         # init fitness data
-        fitness.init_data(question, top1_img, top1_answer)
+        fitness.init_data(question, original_image, golder_answer)
         
         # algorithm
         algorithm = NSGAII(
@@ -48,7 +50,9 @@ def main(args):
             max_iter=args.max_iter,
             fitness=fitness,
             std=args.std,
-            sample_id=str(i)
+            sample_id=str(i),
+            log_dir=result_dir,
+            n_k=args.n_k
         )
 
         algorithm.solve()
@@ -59,10 +63,10 @@ def main(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-
-    parser.add_argument("--annotation_path", type=str, required=True, help="Path to annotation file (json or txt)")
-    parser.add_argument("--dataset_dir", type=str, required=True, help="Directory of the dataset images")
-    parser.add_argument("--sample_id_path", type=str, required=True, help="Path to text file containing sample IDs to run")
+    parser.add_argument("--reader_dir", type=str, required=True)
+    parser.add_argument("--retri_dir", type=str, required=True)
+    parser.add_argument("--reader_name", type=str, default="llava")
+    parser.add_argument("--retriever_name", type=str, default="clip")
     parser.add_argument("--w", type=int, default=312, help="Width to resize images")
     parser.add_argument("--h", type=int, default=312, help="Height to resize images")
     parser.add_argument("--pop_size", type=int, default=20, help="Population size for NSGA-II")

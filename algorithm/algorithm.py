@@ -93,7 +93,8 @@ class NSGAII:
                  fitness, # multi score
                  std,
                  sample_id,
-                 log_dir="logs",
+                 log_dir,
+                 n_k,
                  ):
         self.population_size = population_size
         self.mutation_rate = mutation_rate
@@ -106,6 +107,7 @@ class NSGAII:
         self.nds = NonDominatedSorting()
         self.sample_id = sample_id
         self.log_dir = os.path.join(log_dir, f"{self.fitness.retriever_name}_{self.fitness.reader_name}_{self.std}", str(self.sample_id))
+        self.n_k = n_k
         os.makedirs(self.log_dir, exist_ok=True)
 
         
@@ -244,10 +246,9 @@ class NSGAII:
         self.save_logs()
         
     def save_logs(self):
-        score_log_file = os.path.join(self.log_dir, "scores.pkl") 
-        invidual_log_file = os.path.join(self.log_dir, "individuals.pkl")
-        img_dir = os.path.join(self.log_dir, "images")
-        self.fitness.original_img.save(os.path.join(self.log_dir, "original.png"))
+        score_log_file = os.path.join(self.log_dir, f"scores_{self.n_k}.pkl") 
+        invidual_log_file = os.path.join(self.log_dir, "individuals_{self.n_k}.pkl")
+        img_dir = os.path.join(self.log_dir, "images_{self.n_k}")
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)

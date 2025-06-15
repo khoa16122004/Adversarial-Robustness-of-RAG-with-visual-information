@@ -199,3 +199,4 @@ cython_debug/
 algorithm/llavanext_0.1
 algorithm/jerry_pick
 algorithm/*gif
+reader_result
