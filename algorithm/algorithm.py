@@ -5,7 +5,7 @@ import numpy as np
 import os
 import pickle
 from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
-
+from tqdm import tqdm
 class GA:
     def __init__(self, population_size, mutation_rate, F, w, h, max_iter, tournament_size, fitness, std):
         self.population_size = population_size
@@ -175,7 +175,7 @@ class NSGAII:
 
         self.history = []
 
-        for iter in range(self.max_iter):
+        for iter in tqdm(**range(self.max_iter)):
             
             # print("Population shape: ", P.shape)
             # print("Population retri score shape: ", P_retri_score.shape)
@@ -247,8 +247,8 @@ class NSGAII:
         
     def save_logs(self):
         score_log_file = os.path.join(self.log_dir, f"scores_{self.n_k}.pkl") 
-        invidual_log_file = os.path.join(self.log_dir, "individuals_{self.n_k}.pkl")
-        img_dir = os.path.join(self.log_dir, "images_{self.n_k}")
+        invidual_log_file = os.path.join(self.log_dir, f"individuals_{self.n_k}.pkl")
+        img_dir = os.path.join(self.log_dir, f"images_{self.n_k}")
         
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)
