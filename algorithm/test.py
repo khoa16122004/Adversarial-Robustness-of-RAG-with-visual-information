@@ -32,16 +32,15 @@ def main(args):
         with open(json_path, "r") as f:
             data = json.load(f)
             golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
-        original_image = retri_imgs[args.n_k]    
-        
-        # print(f"Question: {question}")
-        # print(f"Answer: {answer}")
-        # print(f"Query: {query}")
-        # print(f"Gold answer: {golder_answer}")
-        
         
         # init fitness data
-        fitness.init_data(query, question, original_image, golder_answer)
+        top_adv_imgs = [Image.open(os.path.join(args.result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")).convert("RGB") for k in range(1, args.n_k)]
+        top_original_imgs = retri_imgs[:args.n_k]
+        fitness.init_data(query, 
+                          question, 
+                          top_adv_imgs, # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}
+                          top_original_imgs,  # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
+                          golder_answer)
         
         # algorithm
         algorithm = NSGAII(
@@ -59,6 +58,7 @@ def main(args):
         )
 
         algorithm.solve()
+        break
         
 
 

@@ -249,7 +249,9 @@ class NSGAII:
         score_log_file = os.path.join(self.log_dir, f"scores_{self.n_k}.pkl") 
         invidual_log_file = os.path.join(self.log_dir, f"individuals_{self.n_k}.pkl")
         img_dir = os.path.join(self.log_dir, f"images_{self.n_k}")
-        
+    
+        final_selection_adv_img = self.final_selection()
+        final_selection_adv_img.save(os.path.join(self.log_dir, f"adv_{self.n_k}.png"))
         with open(score_log_file, 'wb') as f:
             pickle.dump(self.history, f)
         
@@ -259,6 +261,17 @@ class NSGAII:
         os.makedirs(img_dir, exist_ok=True)
         for i, img in enumerate(self.rank_0_adv_imgs):
             img.save(os.path.join(img_dir, f"{i}.png"))
+    
+    def final_selection(self):
+        valid_indices = np.where(self.best_retri_score < 1)[0]
+
+        if len(valid_indices) > 0:
+            best_idx = valid_indices[np.argmin(self.best_reader_score[valid_indices])]
+        else:
+            best_idx = np.argmin(self.best_retri_score)
+        
+        return self.rank_0_adv_imgs[best_idx]
+
         
     
     def NSGA_selection(self, pool_fitness):

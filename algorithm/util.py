@@ -4,10 +4,7 @@ import numpy as np
 import os
 from PIL import Image
 import json
-from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
-from nltk.translate.meteor_score import meteor_score
-from rouge_score import rouge_scorer
-import bert_score
+
 
 def dominate(a, b):
     if a[0] < b[0] and a[1] < b[1]:
@@ -109,6 +106,10 @@ class DataLoader:
     
     
 def compute_nlg_metrics(pred, refs):
+    from nltk.translate.bleu_score import sentence_bleu, SmoothingFunction
+    from nltk.translate.meteor_score import meteor_score
+    from rouge_score import rouge_scorer
+    import bert_score
     refs = [r.lower().strip() for r in refs]
     pred = pred.lower().strip()
     

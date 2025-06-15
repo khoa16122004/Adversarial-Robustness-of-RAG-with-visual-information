@@ -36,12 +36,13 @@ class Reader(torch.nn.Module):
     
     @torch.no_grad()
     def forward(self, qs, img_files, answer):
+        # img_files = [[img_files]]
         # input
         intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
         prompt = f"{intruction}\n question {qs}\n images <image>"
         all_outputs = []
-        for img in img_files:
-            output = self.model.compute_log_prob(prompt, [img], answer)
+        for topk_imgs in img_files:
+            output = self.model.compute_log_prob(prompt, topk_imgs, answer)
             all_outputs.append(output)
         
         all_outputs = torch.tensor(all_outputs)    
