@@ -27,8 +27,9 @@ def main(args):
     for i in range(len(loader)):    
         # take data
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
+        retri_imgs_resize = [img.resize((312, 312)) for img in retri_imgs]
         print("query: ", query)
-        print(fitness.retriever(query, retri_imgs))
+        print(fitness.retriever(query, retri_imgs_resize))
         break
         
 
