@@ -28,7 +28,7 @@ def main(args):
     for i in range(len(loader)):    
         # take data
         question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(i)
-        json_path = os.path.join(args.reader_dir, str(i), "answer.json")
+        json_path = os.path.join(args.reader_dir, str(i), "answers.json")
         with open(json_path, "r") as f:
             data = json.load(f)
             golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
