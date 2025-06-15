@@ -72,7 +72,7 @@ def main(args):
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
             json.dump(metadata, f, indent=4)
-        
+        print("topk_basenames", topk_basenames)
         raise
 
 # tensor([0.3416, 0.3347, 0.3318, 0.3301, 0.3289], from choose
