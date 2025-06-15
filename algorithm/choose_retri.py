@@ -42,11 +42,13 @@ def main(args):
         # sims retri
         corpus = []
         basename_corpus = []
+        paths_corpus = []
         for i, path in enumerate(paths):
             try:
                 image = Image.open(path).resize((args.w, args.h))
                 
                 basename_corpus.append(path_basenames[i])
+                paths_corpus.append(path)
                 corpus.append(image)
             except:
                 continue
@@ -57,6 +59,7 @@ def main(args):
         print(topk_values)
         topk_basenames = [basename_corpus[i] for i in topk_indices]
         topk_imgs = [corpus[i] for i in topk_indices]
+        topk_paths = [paths_corpus[i] for i in topk_indices]
         # path
         metadata = {
             "question": question,
@@ -70,10 +73,9 @@ def main(args):
         # save
         sample_dir = os.path.join(output_dir, str(sample_id))
         os.makedirs(sample_dir, exist_ok=True)
-        for basename in topk_basenames:
-            original_path = os.path.join(args.dataset_dir, basename)
+        for basename, path in zip(topk_basenames, topk_paths):
             save_path = os.path.join(sample_dir, basename)
-            shutil.copyfile(original_path, save_path)
+            shutil.copyfile(path, save_path)
 
         
         with open(os.path.join(sample_dir, "metadata.json"), "w") as f:
