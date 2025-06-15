@@ -33,33 +33,10 @@ def main(args):
             golder_answer =  data['topk_results'][f'top_{args.n_k}']['model_answer']
         
         # init fitness data
-        top_adv_imgs = [Image.open(os.path.join(result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")) for k in range(1, args.n_k)]
-        print("top_adv_imgs: ", top_adv_imgs)
-        top_original_imgs = retri_imgs[:args.n_k]
-        print("top_original_imgs: ", top_original_imgs)
-        fitness.init_data(query, 
-                          question, 
-                          top_adv_imgs, # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}
-                          top_original_imgs,  # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
-                          golder_answer,
-                          args.n_k)
-        
-        # algorithm
-        algorithm = NSGAII(
-            population_size=args.pop_size,
-            mutation_rate=args.mutation_rate,
-            F=args.F,
-            w=args.w,
-            h=args.h,
-            max_iter=args.max_iter,
-            fitness=fitness,
-            std=args.std,
-            sample_id=str(i),
-            log_dir=result_dir,
-            n_k=args.n_k
-        )
+        top_adv_imgs = [Image.open(os.path.join(result_dir, f"{args.retriever_name}_{args.reader_name}_{args.std}", str(i), f"adv_{k}.png")) for k in range(1, args.n_k + 1)]
 
-        algorithm.solve()
+        print(fitness.retriever(question, top_adv_imgs))
+        print(fitness.retriever(question, retri_imgs))
         break
         
 
