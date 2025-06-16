@@ -46,6 +46,8 @@ class MultiScore:
         
         # adv_top_nk
         adv_topk_imgs = [self.top_adv_imgs + [adv_img] for adv_img in adv_imgs]
+        print("adv_topk_imgs: ", len(adv_topk_imgs))
+        print("adv_topk_imgs[0]: ", len(adv_topk_imgs[0]))
         reader_result = self.reader(self.question, adv_topk_imgs, self.answer)
 
         retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
