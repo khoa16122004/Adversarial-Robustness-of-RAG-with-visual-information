@@ -31,7 +31,7 @@ class Reader(torch.nn.Module):
           
     @torch.no_grad()
     def forward(self, qs, img_files):
-        instruction = "You will be given a question and an image to help you answer the question. Please answer the question in a short way."
+        instruction = "You will be given a question and some images to help you answer the question. Please answer the question in a short way."
         prompt = f"{instruction}\n question: {qs}\n images: <image>"
         all_outputs = []
 
