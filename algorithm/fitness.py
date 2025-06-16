@@ -93,7 +93,7 @@ if __name__ == "__main__":
     
     print(all_scores)
     print(all_texts)
-    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 1.0
+    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 100
     adv_img = to_pil_image(adv_img_tensor)
     all_scores, all_texts = fitness.reader(question, [[adv_img]])
     print(all_scores)
