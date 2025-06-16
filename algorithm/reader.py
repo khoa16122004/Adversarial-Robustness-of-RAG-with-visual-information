@@ -28,7 +28,7 @@ class Reader(torch.nn.Module):
     
     def compute_similarity(self, preds):
         pred_embeddings = self.clip_model.extract_textual_features(preds)
-        sim = pred_embeddings @ self.gt_embedding.unsqueeze(0).T
+        sim = pred_embeddings @ self.gt_embedding.T
         return sim
         
           
