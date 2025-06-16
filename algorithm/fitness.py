@@ -81,7 +81,7 @@ if __name__ == "__main__":
     top_adv_imgs = [Image.open(os.path.join(result_dir, f"clip_llava_0.1", str(sample_id), f"adv_{k}.png")) for k in range(1, n_k)]
     top_original_imgs = retri_imgs[:n_k]
     original_img_tensor = transforms.ToTensor()(top_original_imgs[-1]).cuda()
-    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda()
+    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0.5
     adv_img = to_pil_image(adv_img_tensor)
     print(fitness.reader(query, [top_adv_imgs + [adv_img]], golder_answer))
     
