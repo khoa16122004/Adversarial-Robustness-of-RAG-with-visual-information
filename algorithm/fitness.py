@@ -83,11 +83,11 @@ if __name__ == "__main__":
     original_img_tensor = transforms.ToTensor()(top_original_imgs[-1]).cuda()
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda()
     adv_img = to_pil_image(adv_img_tensor)
-    print(fitness.retriever(query, [top_adv_imgs + [adv_img]], golder_answer))
+    print(fitness.reader(query, [top_adv_imgs + [adv_img]], golder_answer))
     
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda()
     adv_img = to_pil_image(adv_img_tensor)
-    print(fitness.retriever(query, [top_adv_imgs + [adv_img]], golder_answer))
+    print(fitness.reader(query, [top_adv_imgs + [adv_img]], golder_answer))
     
     
 
