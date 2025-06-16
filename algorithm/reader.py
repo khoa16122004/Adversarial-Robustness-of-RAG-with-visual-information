@@ -44,7 +44,7 @@ class Reader(torch.nn.Module):
             text_output = self.model(prompt, topk_imgs)  # string output
             all_outputs.append(text_output)
 
-        scores = self.compute_similarity(all_outputs, answer)
+        scores = self.compute_similarity(all_outputs)
 
         
         return torch.tensor(scores).cuda(), all_outputs
