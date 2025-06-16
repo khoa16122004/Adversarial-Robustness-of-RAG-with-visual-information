@@ -22,7 +22,7 @@ def main(args):
                          )
     
     # result_dir
-    result_dir = f"attack_result_debug"
+    result_dir = f"attack_result"
     os.makedirs(result_dir, exist_ok=True)
     
     for i in range(len(loader)):    
