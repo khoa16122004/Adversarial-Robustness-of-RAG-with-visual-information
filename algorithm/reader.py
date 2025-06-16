@@ -3,13 +3,14 @@ import sys
 import torch
 from PIL import Image
 import pickle as pkl
+from bert_score import score as bert_score
 sys.path.append('..')
 from utils import DataLoader
 
 class Reader(torch.nn.Module):
     def __init__(self, model_name="llava"):
         super().__init__()
-        
+        self.bert_model = "bert-base-uncased"  # hoặc "roberta-large" nếu muốn cao hơn
         if model_name == "llava":
             from lvlm_models.llava_ import LLava
             
@@ -19,20 +20,27 @@ class Reader(torch.nn.Module):
                 pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
             )
-            
+    def compute_similarity(self, pred, gt):
+        # BERTScore expects lists
+        P, R, F1 = bert_score([pred], [gt], lang="en", model_type=self.bert_model, verbose=False)
+        return F1[0].item()  # return scalar float      
+    
+          
     @torch.no_grad()
-    def image_to_text(self, qs, img_files):
-  
-        if not isinstance(img_files, list):
-            img_files = [img_files]
+    def forward(self, qs, img_files, answer):
+        instruction = "You will be given a question and an image to help you answer the question. Please answer the question in a short way."
+        prompt = f"{instruction}\n question: {qs}\n images: <image>"
         
-        # input
-        intruction = "You will be given a question and a image to help you answer the question."
-        prompt = f"{intruction}\n question {qs}\n images: " +  "<image>" * len(img_files)
-        
-        outputs = self.model(prompt, img_files)[0]
-        
-        return outputs
+        all_outputs = []
+        all_texts = []
+        for topk_imgs in img_files:
+            # topk_imgs: list of PIL.Image
+            text_output = self.model(prompt, topk_imgs)[0]  # string output
+            score = self.compute_similarity(text_output, answer)
+            all_outputs.append(score)
+            all_texts.append(text_output)
+
+        return torch.tensor(all_outputs).cuda(), all_texts
     
     @torch.no_grad()
     def forward(self, qs, img_files, answer):
@@ -43,7 +51,7 @@ class Reader(torch.nn.Module):
         all_outputs = []
         for topk_imgs in img_files:
             text_output = self.model(prompt, topk_imgs)
-            print(text_output)
+            # calculate sim text_output and answer
             raise
         
         all_outputs = torch.tensor(all_outputs)    

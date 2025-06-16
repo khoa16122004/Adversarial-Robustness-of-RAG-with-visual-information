@@ -78,16 +78,21 @@ if __name__ == "__main__":
         data = json.load(f)
         golder_answer =  data['topk_results'][f'top_{n_k}']['model_answer']
 
-    top_adv_imgs = [Image.open(os.path.join(result_dir, f"clip_llava_0.1", str(sample_id), f"adv_{k}.png")) for k in range(1, n_k)]
-    top_original_imgs = retri_imgs[:n_k]
-    original_img_tensor = transforms.ToTensor()(top_original_imgs[-1]).cuda()
-    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0.05
+    # 
+    top_original_imgs = retri_imgs[0]
+    original_img_tensor = transforms.ToTensor()(top_original_imgs).cuda()
+    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0
     adv_img = to_pil_image(adv_img_tensor)
-    print(fitness.reader(query, [top_adv_imgs + [adv_img]], golder_answer))
-    
-    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda()
+    all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
+    print(all_outputs)
+    print(all_texts)
+    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0
     adv_img = to_pil_image(adv_img_tensor)
-    print(fitness.reader(query, [top_adv_imgs + [adv_img]], golder_answer))
-    
+    all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
+    print(all_outputs)
+    print(all_texts)
+
+
+   
     
 
