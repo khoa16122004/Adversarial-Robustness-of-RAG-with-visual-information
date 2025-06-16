@@ -36,8 +36,12 @@ class MultiScore:
         self.question = question
         self.query = query
         
-    
+    def all_equal(self, perturbations: torch.Tensor) -> bool:
+        return (perturbations == perturbations[0]).all().item()
     def __call__(self, pertubations):  # pertubations: tensor
+        # kiểm tra pertubations có giống nmhau ko
+        print("The same: ", self.all_equal(pertubations))
+        raise
         adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
