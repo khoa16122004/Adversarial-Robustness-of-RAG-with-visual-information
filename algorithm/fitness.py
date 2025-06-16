@@ -64,7 +64,7 @@ if __name__ == "__main__":
     retri_dir  = "retri_result_clip"
     reader_dir = r"reader_result/Llama-7b/clip"
     sample_id = 0
-    n_k = 1
+    n_k = 2
     
     loader = DataLoader(retri_dir=retri_dir)
     fitness = MultiScore(reader_name="llava", 
