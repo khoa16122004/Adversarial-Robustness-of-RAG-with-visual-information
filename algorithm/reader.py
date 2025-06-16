@@ -42,7 +42,7 @@ class Reader(torch.nn.Module):
         prompt = f"{intruction}\n question {qs}\n images <image>"
         all_outputs = []
         for topk_imgs in img_files:
-            text_output = self.model(prompt, topk_imgs, answer)
+            text_output = self.model(prompt, topk_imgs)
             print(text_output)
             raise
         
