@@ -26,6 +26,8 @@ class MultiScore:
         # top_adv_imgs: I'_0 , I'_1, ..., I'_{nk-2}
         # top_orginal_imgs: I_0, I_1, ..., I_{nk-1}
         
+        self.reader.init_data(answer)
+        
         self.original_img = deepcopy(top_orginal_imgs[-1]) # topk original img
         self.top1_img = deepcopy(top_orginal_imgs[0])
         self.top_adv_imgs = top_adv_imgs
@@ -83,13 +85,13 @@ if __name__ == "__main__":
     original_img_tensor = transforms.ToTensor()(top_original_imgs).cuda()
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0
     adv_img = to_pil_image(adv_img_tensor)
-    all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
-    print(all_outputs)
+    all_scores, all_texts = fitness.reader(question, [[adv_img]], answer)
+    print(all_scores)
     print(all_texts)
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0.5
     adv_img = to_pil_image(adv_img_tensor)
-    all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
-    print(all_outputs)
+    all_scores, all_texts = fitness.reader(question, [[adv_img]], answer)
+    print(all_scores)
     print(all_texts)
 
 

@@ -3,14 +3,16 @@ import sys
 import torch
 from PIL import Image
 import pickle as pkl
-from bert_score import score as bert_score
+from vl_models import CLIPModel
 sys.path.append('..')
 from utils import DataLoader
 
 class Reader(torch.nn.Module):
     def __init__(self, model_name="llava"):
         super().__init__()
-        self.bert_model = "bert-base-uncased"  # hoặc "roberta-large" nếu muốn cao hơn
+        self.bert_model = "bert-base-uncased"
+        self.clip_model =  CLIPModel()
+        
         if model_name == "llava":
             from lvlm_models.llava_ import LLava
             
@@ -20,11 +22,15 @@ class Reader(torch.nn.Module):
                 pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
             )
-    def compute_similarity(self, pred, gt):
-        # BERTScore expects lists
-        P, R, F1 = bert_score([pred], [gt], lang="en", model_type=self.bert_model, verbose=False)
-        return F1[0].item()  # return scalar float      
+            
+    def init_data(self, golden_answer):
+        self.gt_embedding = self.clip_model.extract_textual_features([golden_answer])[0]
     
+    def compute_similarity(self, preds):
+        pred_embeddings = self.clip_model.extract_textual_features(preds)
+        sim = pred_embeddings @ self.gt_embedding.unsqueeze(0)
+        return sim
+        
           
     @torch.no_grad()
     def forward(self, qs, img_files, answer):
@@ -32,15 +38,16 @@ class Reader(torch.nn.Module):
         prompt = f"{instruction}\n question: {qs}\n images: <image>"
         
         all_outputs = []
-        all_texts = []
+
         for topk_imgs in img_files:
             # topk_imgs: list of PIL.Image
-            text_output = self.model(prompt, topk_imgs)[0]  # string output
-            score = self.compute_similarity(text_output, answer)
-            all_outputs.append(score)
-            all_texts.append(text_output)
+            text_output = self.model(prompt, topk_imgs)  # string output
+            all_outputs.append(text_output)
 
-        return torch.tensor(all_outputs).cuda(), all_texts
+        scores = self.compute_similarity(all_outputs, answer)
+
+        
+        return torch.tensor(scores).cuda(), all_outputs
     
 
             
