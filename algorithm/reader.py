@@ -14,7 +14,7 @@ class Reader(torch.nn.Module):
         
         if model_name == "llava":
             from lvlm_models.llava_ import LLava
-            self.template = "You will be given a question and somes images to help you answer the question. Please base on the images, answer the question in the short ways."
+            self.template = "Answer the given question based only on the visual content of the images. Do not guess or use outside knowledge. Keep the answer short."
             self.model = LLava(
                 pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
