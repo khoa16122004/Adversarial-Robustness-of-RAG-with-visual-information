@@ -72,6 +72,7 @@ if __name__ == "__main__":
     fitness = MultiScore(reader_name="llava", 
                          retriever_name="clip"
                          )
+
     
     result_dir = f"attack_result"
     question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(sample_id)
@@ -80,12 +81,16 @@ if __name__ == "__main__":
         data = json.load(f)
         golder_answer =  data['topk_results'][f'top_{n_k}']['model_answer']
 
+    fitness.reader.init_data(golder_answer)
+
+
     # 
     top_original_imgs = retri_imgs[0]
     original_img_tensor = transforms.ToTensor()(top_original_imgs).cuda()
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0
     adv_img = to_pil_image(adv_img_tensor)
     all_scores, all_texts = fitness.reader(question, [[adv_img]])
+    
     print(all_scores)
     print(all_texts)
     adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0.5
