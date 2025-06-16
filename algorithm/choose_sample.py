@@ -57,7 +57,6 @@ def main(args):
         top1_img = corpus[sim_scores.argmax()]
 
         top1_answer = fitness.reader.image_to_text(question, [top1_img])
-        print("top1 answer:", top1_answer)
         result = top1_answer
         while result not in ["True", "False"]:
             result = llm.text_to_text(
