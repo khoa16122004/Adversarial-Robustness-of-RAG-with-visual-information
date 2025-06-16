@@ -11,7 +11,8 @@ import sys
 sys.path.append('..')
 from utils import DataLoader
 from copy import deepcopy
-
+import os
+import json
 
 class MultiScore:
     def __init__(self, reader_name, retriever_name):
@@ -33,7 +34,7 @@ class MultiScore:
         self.retri_clean_reuslt = self.retriever(query, [self.top1_img]) # s(q, I_0)
         self.reader_clean_result = self.reader(question, [top_orginal_imgs], answer) # p(a | I_nk, q)
         print("reader_clean_result: ", self.reader_clean_result)
-        raise
+        
         self.answer = answer
         self.question = question
         self.query = query
@@ -50,17 +51,37 @@ class MultiScore:
         
         # adv_top_nk
         adv_topk_imgs = [self.top_adv_imgs + [adv_img] for adv_img in adv_imgs]
-        adv_topk_imgs[0][0].save("adv_test_1.jpg")
-        adv_topk_imgs[0][1].save("adv_test_2.jpg")
-        raise
-        print("adv_topk_imgs: ", len(adv_topk_imgs))
-        print("adv_topk_imgs[0]: ", len(adv_topk_imgs[0]))
+
         reader_result = self.reader(self.question, adv_topk_imgs, self.answer)
 
         retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
         reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
         return retri_scores, reader_scores,  adv_imgs  
+    
+    
+if __name__ == "__main__":
+    retri_dir  = "retri_result_clip"
+    reader_dir = r"reader_result/Llama-7b/clip"
+    sample_id = 0
+    n_k = 1
+    
+    loader = DataLoader(retri_dir=retri_dir)
+    fitness = MultiScore(reader_name="llava", 
+                         retriever_name="clip"
+                         )
+    
+    result_dir = f"attack_result"
+    question, answer, query, gt_basenames, retri_basenames, retri_imgs = loader.take_data(sample_id)
+    json_path = os.path.join(reader_dir, str(sample_id), "answers.json")
+    with open(json_path, "r") as f:
+        data = json.load(f)
+        golder_answer =  data['topk_results'][f'top_{n_k}']['model_answer']
+
+    top_adv_imgs = [Image.open(os.path.join(result_dir, f"clip_llava_clip", str(sample_id), f"adv_{k}.png")) for k in range(1, n_k)]
+
+    print(fitness.reader(question, top_adv_imgs, golder_answer))
+
     
     
 
