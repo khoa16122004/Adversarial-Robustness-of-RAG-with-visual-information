@@ -86,7 +86,7 @@ if __name__ == "__main__":
     all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
     print(all_outputs)
     print(all_texts)
-    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0
+    adv_img_tensor = original_img_tensor + torch.rand(3, 312, 312).cuda() * 0.5
     adv_img = to_pil_image(adv_img_tensor)
     all_outputs, all_texts = fitness.reader(question, [[adv_img]], answer)
     print(all_outputs)

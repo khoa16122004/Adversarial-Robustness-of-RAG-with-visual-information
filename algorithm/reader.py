@@ -42,21 +42,7 @@ class Reader(torch.nn.Module):
 
         return torch.tensor(all_outputs).cuda(), all_texts
     
-    @torch.no_grad()
-    def forward(self, qs, img_files, answer):
-        # img_files = [[img_files]]
-        # input
-        intruction = "You will be given a question and a image to help you answer the question. Please answer the question in the short ways."
-        prompt = f"{intruction}\n question {qs}\n images <image>"
-        all_outputs = []
-        for topk_imgs in img_files:
-            text_output = self.model(prompt, topk_imgs)
-            # calculate sim text_output and answer
-            raise
-        
-        all_outputs = torch.tensor(all_outputs)    
-        return all_outputs
-            
+
             
             
 if __name__ == "__main__":
