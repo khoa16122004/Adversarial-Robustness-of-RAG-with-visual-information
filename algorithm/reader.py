@@ -33,20 +33,17 @@ class Reader(torch.nn.Module):
         
           
     @torch.no_grad()
-    def forward(self, qs, img_files, answer):
+    def forward(self, qs, img_files):
         instruction = "You will be given a question and an image to help you answer the question. Please answer the question in a short way."
         prompt = f"{instruction}\n question: {qs}\n images: <image>"
         
         all_outputs = []
 
         for topk_imgs in img_files:
-            # topk_imgs: list of PIL.Image
             text_output = self.model(prompt, topk_imgs)  # string output
             all_outputs.append(text_output)
 
         scores = self.compute_similarity(all_outputs)
-
-        
         return torch.tensor(scores).cuda(), all_outputs
     
 
