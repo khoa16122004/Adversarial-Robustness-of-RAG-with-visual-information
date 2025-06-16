@@ -42,9 +42,10 @@ class MultiScore:
     def __call__(self, pertubations):  # pertubations: tensor
         adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
-        print(self.all_equal(adv_img_tensors))
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
-
+        adv_imgs[0][0].save("adv_test_1.jpg")
+        adv_imgs[0][1].save("adv_test_2.jpg")
+        raise
         retrieval_result = self.retriever(self.query, adv_imgs)
         
         # adv_top_nk
