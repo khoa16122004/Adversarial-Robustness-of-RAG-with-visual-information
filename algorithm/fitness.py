@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     top_adv_imgs = [Image.open(os.path.join(result_dir, f"clip_llava_0.1", str(sample_id), f"adv_{k}.png")) for k in range(1, n_k)]
 
-    print(fitness.reader(question, top_adv_imgs, golder_answer))
+    print(fitness.reader(question, [top_adv_imgs], golder_answer))
 
     
     
