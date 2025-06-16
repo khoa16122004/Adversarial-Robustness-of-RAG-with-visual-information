@@ -35,6 +35,7 @@ class Reader(torch.nn.Module):
         all_outputs = []
 
         for topk_imgs in img_files:
+            print(prompt)
             text_output = self.model(prompt, topk_imgs)[0]  # string output
             print(text_output)
             all_outputs.append(text_output)
