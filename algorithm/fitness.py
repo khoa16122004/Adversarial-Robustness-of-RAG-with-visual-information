@@ -43,13 +43,14 @@ class MultiScore:
         adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
-        adv_imgs[0][0].save("adv_test_1.jpg")
-        adv_imgs[0][1].save("adv_test_2.jpg")
-        raise
+
         retrieval_result = self.retriever(self.query, adv_imgs)
         
         # adv_top_nk
         adv_topk_imgs = [self.top_adv_imgs + [adv_img] for adv_img in adv_imgs]
+        adv_topk_imgs[0][0].save("adv_test_1.jpg")
+        adv_topk_imgs[0][1].save("adv_test_2.jpg")
+        raise
         print("adv_topk_imgs: ", len(adv_topk_imgs))
         print("adv_topk_imgs[0]: ", len(adv_topk_imgs[0]))
         reader_result = self.reader(self.question, adv_topk_imgs, self.answer)
