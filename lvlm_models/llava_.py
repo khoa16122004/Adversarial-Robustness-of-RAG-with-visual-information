@@ -42,7 +42,7 @@ class LLava:
             self.reload()
         
         conv = copy.deepcopy(conv_templates["qwen_1_5"])
-        conv.append_message(conv.roles[0], "Describe this image <image> in the shortways")
+        conv.append_message(conv.roles[0], "Describe this image <image> in the really shortways")
         conv.append_message(conv.roles[1], None)
         prompt_question = conv.get_prompt()
         input_ids = tokenizer_image_token(prompt_question, self.tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt").unsqueeze(0).to(self.device)
