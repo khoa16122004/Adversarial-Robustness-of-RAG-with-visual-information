@@ -9,7 +9,7 @@ from util import arkiv_proccess
 from PIL import Image
 import sys
 sys.path.append('..')
-from utils import DataLoader
+from util import DataLoader
 from copy import deepcopy
 import os
 import json
