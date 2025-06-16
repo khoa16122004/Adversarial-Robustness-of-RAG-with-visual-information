@@ -32,7 +32,7 @@ class MultiScore:
         self.original_img_tensor = transforms.ToTensor()(self.original_img).cuda()
         self.retri_clean_reuslt = self.retriever(query, [self.top1_img]) # s(q, I_0)
         self.reader_clean_result = self.reader(question, [top_orginal_imgs], answer) # p(a | I_nk, q)
-        print("retri_clean_reuslt: ", self.retri_clean_reuslt)
+        print("reader_clean_result: ", self.reader_clean_result)
         raise
         self.answer = answer
         self.question = question
