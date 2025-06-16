@@ -79,8 +79,9 @@ if __name__ == "__main__":
         golder_answer =  data['topk_results'][f'top_{n_k}']['model_answer']
 
     top_adv_imgs = [Image.open(os.path.join(result_dir, f"clip_llava_0.1", str(sample_id), f"adv_{k}.png")) for k in range(1, n_k)]
+    top_original_imgs = retri_imgs[:n_k]
 
-    print(fitness.reader(question, [top_adv_imgs], golder_answer))
+    print(fitness.reader(question, [top_original_imgs], golder_answer))
 
     
     
