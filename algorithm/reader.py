@@ -37,6 +37,7 @@ class Reader(torch.nn.Module):
 
         for topk_imgs in img_files:
             text_output = self.model(prompt, topk_imgs)[0]  # string output
+            print(text_output)
             all_outputs.append(text_output)
 
         scores = self.compute_similarity(all_outputs)
