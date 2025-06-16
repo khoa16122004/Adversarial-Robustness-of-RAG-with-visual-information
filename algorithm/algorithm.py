@@ -170,7 +170,7 @@ class NSGAII:
 
     def solve(self):
         P = torch.rand(self.population_size, 3, self.w, self.h).cuda() * self.std
-        P_retri_score, P_reader_score, P_adv_imgs = self.fitness(P)
+        P_retri_score, P_reader_score, P_adv_imgs, P_adv_texts = self.fitness(P)
         
 
         self.history = []
@@ -208,7 +208,7 @@ class NSGAII:
 
             # print("Off string shape: ", O.shape)
             # calculate new fitness
-            O_retri_score, O_reader_score, O_adv_imgs = self.fitness(O)
+            O_retri_score, O_reader_score, O_adv_imgs, O_adv_texts = self.fitness(O)
             # print("Off string retri score shape: ", O_retri_score.shape)
             
             # pool
@@ -217,6 +217,7 @@ class NSGAII:
             pool_reader_score = np.concatenate([P_reader_score, O_reader_score], axis=0)  # (population_size, 2)
             pool_fitness = np.column_stack((pool_retri_score, pool_reader_score))  # (population_size, 2)
             pool_adv_imgs = P_adv_imgs + O_adv_imgs
+            pool_adv_texts = P_adv_texts + O_adv_texts
             # print("Pool shape: ", pool.shape)
             # print("Pool fitness shape: ", pool_fitness.shape)
             # print("Pool retri score shape: ", pool_retri_score.shape)
@@ -230,17 +231,20 @@ class NSGAII:
             P = pool[selected_indices]
             
             
+            
             rank_0_indices = fronts[0]  # Get indices of the first Pareto front
             rank_0_individuals = pool[rank_0_indices]
             rank_0_retri_scores = pool_retri_score[rank_0_indices]
             rank_0_reader_scores = pool_reader_score[rank_0_indices]  
             rank_0_adv_imgs = [pool_adv_imgs[i] for i in rank_0_indices]
+            rank_0_adv_texts = [pool_adv_texts[i] for i in rank_0_indices]
            
             self.history.append(np.column_stack([rank_0_retri_scores, rank_0_reader_scores]))
             self.best_individual = rank_0_individuals
             self.best_retri_score = rank_0_retri_scores
             self.best_reader_score = rank_0_reader_scores 
             self.rank_0_adv_imgs = rank_0_adv_imgs
+            self.rank_0_adv_texts = rank_0_adv_texts
             
         
         self.save_logs()
@@ -249,6 +253,7 @@ class NSGAII:
         score_log_file = os.path.join(self.log_dir, f"scores_{self.n_k}.pkl") 
         invidual_log_file = os.path.join(self.log_dir, f"individuals_{self.n_k}.pkl")
         img_dir = os.path.join(self.log_dir, f"images_{self.n_k}")
+        adv_text_dir = os.path.join(self.log_dir, f"adv_texts_{self.n_k}.txt")
     
         final_selection_adv_img = self.final_selection()
         final_selection_adv_img.save(os.path.join(self.log_dir, f"adv_{self.n_k}.png"))
@@ -261,6 +266,10 @@ class NSGAII:
         os.makedirs(img_dir, exist_ok=True)
         for i, img in enumerate(self.rank_0_adv_imgs):
             img.save(os.path.join(img_dir, f"{i}.png"))
+            
+        with open(adv_text_dir, "w") as f:
+            for text in self.rank_0_adv_texts:
+                f.write(text + "\n")
     
     def final_selection(self):
         valid_indices = np.where(self.best_retri_score < 1)[0]

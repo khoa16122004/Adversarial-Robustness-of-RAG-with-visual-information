@@ -53,12 +53,12 @@ class MultiScore:
         # adv_top_nk
         adv_topk_imgs = [self.top_adv_imgs + [adv_img] for adv_img in adv_imgs]
 
-        reader_result = self.reader(self.question, adv_topk_imgs, self.answer)
+        reader_result, adv_texts = self.reader(self.question, adv_topk_imgs)
 
         retri_scores = (self.retri_clean_reuslt / retrieval_result).cpu().numpy()
         reader_scores = (reader_result / self.reader_clean_result).cpu().numpy()
 
-        return retri_scores, reader_scores,  adv_imgs  
+        return retri_scores, reader_scores,  adv_imgs, adv_texts  
     
     
 if __name__ == "__main__":
