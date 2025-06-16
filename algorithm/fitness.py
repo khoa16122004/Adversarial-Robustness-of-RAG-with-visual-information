@@ -38,7 +38,7 @@ class MultiScore:
         
     
     def __call__(self, pertubations):  # pertubations: tensor
-        adv_img_tensors = pertubations + self.original_img_tensor * 10
+        adv_img_tensors = pertubations + self.original_img_tensor
         adv_img_tensors = adv_img_tensors.clamp(0, 1)
         adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
 
@@ -56,42 +56,4 @@ class MultiScore:
         return retri_scores, reader_scores,  adv_imgs  
     
     
-if __name__ == "__main__":    
-    annotation_path = "../v1_anno.jsonl"
-    dataset_dir = "../../extracted/train"
-    loader = DataLoader(path=annotation_path,
-                        img_dir=dataset_dir)  
-    w = 312
-    h = 312
-    
-    sample_id = 183
-    question, answer, paths, gt_paths = loader.take_data(sample_id)
-    question = "What is the coloration of pupil of Black-winged Kite (scientific name: Elanus caeruleus)?"
-    img_files = [Image.open(path).convert('RGB').resize((w, h)) for path in gt_paths]
-    fitnesse = MultiScore(reader_name="llava", 
-                        retriever_name=None, 
-                        question=question, 
-                        original_img=img_files[3], 
-                        answer="The bird in the image has orange eyes.")    
-    
-    
-    
-    ind_path = "logs/clip_llava_0.1/individuals.pkl"
-    score_path = "logs/clip_llava_0.1/scores.pkl"
-    
-    history = pkl.load(open(score_path, "rb"))[-1]
-    print("history: ", history)
-    ind = pkl.load(open(ind_path, "rb"))
-    fit_output = fitnesse(ind)
-    print("fitnesse: ", fit_output)
-    
-    adv_img_tensors = ind + fitnesse.original_img_tensor
-    adv_img_tensors = adv_img_tensors.clamp(0, 1)
-    adv_imgs = [to_pil_image(img_tensor) for img_tensor in adv_img_tensors]
-    adv_imgs.append(fitnesse.original_img)
-    outputs = []
-    fitnesse.original_img.save("original.png")
-    for i, img in enumerate(adv_imgs):
-        output = fitnesse.reader.image_to_text(question, [img])
-        outputs.append(output)
-    print("outputs: ", outputs)
+
