@@ -14,7 +14,7 @@ class Reader(torch.nn.Module):
         
         if model_name == "llava":
             from lvlm_models.llava_ import LLava
-            self.template = "Answer the given question based only on the visual content of the images. Do not guess or use outside knowledge. Keep the answer short."
+            self.instruction = "Answer the given question based only on the visual content of the images. Do not guess or use outside knowledge. Keep the answer short."
             self.model = LLava(
                 pretrained="llava-next-interleave-qwen-7b",
                 model_name="llava_qwen",
@@ -31,8 +31,7 @@ class Reader(torch.nn.Module):
           
     @torch.no_grad()
     def forward(self, qs, img_files):
-        instruction = "You will be given a question and some images to help you answer the question. Please answer the question in a short way."
-        prompt = f"{instruction}\n question: {qs}\n images: <image>"
+        prompt = f"{self.instruction}\n question: {qs}\n images: <image>"
         all_outputs = []
 
         for topk_imgs in img_files:
